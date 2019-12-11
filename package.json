@@ -1,0 +1,24 @@
+{
+  "name": "generator-dapr",
+  "version": "0.0.1",
+  "description": "A generator to scaffold dapr projects (see dapr.io)",
+  "files": [
+    "app"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dapr"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "Ryan Volum",
+  "license": "ISC",
+  "dependencies": {
+    "yeoman-generator": "^4.2.0"
+  }
+}
