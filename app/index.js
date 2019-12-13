@@ -10,7 +10,6 @@ module.exports = class extends Generator {
             required: false
         });
 
-        this.log(this.options.name);
     }
     async prompting() {
         let prompts = [{
