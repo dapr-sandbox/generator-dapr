@@ -3,11 +3,12 @@
   "version": "0.0.4",
   "description": "A generator to scaffold dapr projects (see dapr.io)",
   "files": [
-    "app"
+    "lib/app"
   ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "postbuild": "copyfiles -u 1 src/templates/**/* app"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,10 @@
   "author": "Ryan Volum",
   "license": "ISC",
   "dependencies": {
+    "@types/yeoman-generator": "^3.1.4",
     "yeoman-generator": "^4.2.0"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.1.1"
   }
 }
