@@ -1,6 +1,6 @@
 {
   "name": "generator-dapr",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A generator to scaffold dapr projects (see dapr.io)",
   "files": [
     "lib/app"
