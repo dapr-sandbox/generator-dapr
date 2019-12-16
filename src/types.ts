@@ -2,10 +2,10 @@
 type DaprMode = "Kubernetes" | "Standalone";
 
 // Supported languages
-type Language = "JavaScript" | "TypeScript" | "Go" | "Python" | "C#";
+export type Language = "JavaScript" | "TypeScript" | "Go" | "Python" | "C#";
 
 // Supported state stores
-type StateStore = "Redis" | "CosmosDB" | "Cassandra";
+type StateStore = "Redis" | "CosmosDB" | "Cassandra" | "None";
 
 // Supported protocols
 type DaprProtocol = "HTTP" | "gRPC";
@@ -15,34 +15,35 @@ type PubSub = "Redis";
 
 export interface Answers {
     name: string,
-    daprMode: string,
-    languages: string[],
+    mode: DaprMode,
+    languages: Language[],
     store: string
 }
 
 export interface Microservice {
-    /** Informs the language of the microservice */
+    /** The language of the microservice. */
     language: Language;
-    /** Informs whether or not to add boilerplate state management code to microservice */
-    statePersistance: boolean;
-    /** Informs whether or not to add boilerplate pubsub code to microservice */
-    pubsub: boolean;
-    /** Informs whether or not the microservice's manifest should include a LoadBalancer */
-    externalEndpoint: boolean;
-    /** Informs whether or not to add boilerplate actor code to microservice */
+    /** Informs whether or not the microservice gets or sets state. */
+    statePersistance?: boolean;
+    /** Informs whether or not the microservice publishes or subscribes messages using pubsub. */
+    pubsub?: boolean;
+    /** Informs whether or not the microservice's manifest should include a LoadBalancer. */
+    externalEndpoint?: boolean;
+    /** Informs whether or not to add boilerplate actor code to microservice. */
     actors?: boolean;
-    /** Informs protocol boilerplate to add to microservice */
+    /** The protocol the microervice uses. */
     protocol?: DaprProtocol;
 }
 
 export interface App {
-    /** Informs whether the dapr app is running in Kubernetes or in Standalone mode */
+    name: string;
+    /** Indicates whether the dapr app is running in Kubernetes or in Standalone mode. */
     mode: DaprMode;
-    /** Informs the microservices that compose the dapr application */
+    /** The microservices that compose the dapr application. */
     microservices: Microservice[];
-    /** Informs the state store to be used by the dapr application */
+    /** The state store to be used by the dapr application. */
     stateStore?: StateStore;
-    /** Informs the pubsub mechanism to be used by the dapr application */
+    /** The pubsub mechanism to be used by the dapr application. */
     pubsub?: PubSub;
 }
 

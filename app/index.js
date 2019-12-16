@@ -21,7 +21,7 @@ class default_1 extends Generator {
         return __awaiter(this, void 0, void 0, function* () {
             let prompts = [{
                     type: "list",
-                    name: "daprMode",
+                    name: "mode",
                     message: "Are you running dapr in Kubernetes or in standalone mode?",
                     choices: ["Kubernetes", "Standalone"]
                 },
@@ -29,11 +29,11 @@ class default_1 extends Generator {
                     type: "checkbox",
                     name: "languages",
                     message: "What languages would you like to scaffold microservices for? (Use space bar to check the following)",
-                    choices: ["C# (.NET Core)", "JavaScript (Node)", "Python", "Go"]
+                    choices: ["C#", "Go", "JavaScript", "Python"]
                 },
                 {
                     type: "list",
-                    name: "store",
+                    name: "stateStore",
                     message: "What state store (if any) would you like your app to use? (Use space bar to check the following)",
                     choices: ["Redis", "CosmosDB", "Cassandra", "None"]
                 }
@@ -49,39 +49,28 @@ class default_1 extends Generator {
         });
     }
     configuring() {
-        let answers = this.answers;
-        let intro = `Great! I'm scaffolding you a ${answers.daprMode} dapr app called ${this.options.name || answers.name}. The app includes`;
-        let microservicesText;
-        if (answers.languages.length === 0)
-            microservicesText = " no microservices";
-        if (answers.languages.length === 1)
-            microservicesText = ` a ${answers.languages[0]} microservice`;
-        if (answers.languages.length > 1) {
-            microservicesText = ` a ${answers.languages[0]} microservice`;
-            for (let i = 1; i < answers.languages.length - 1; i++) {
-                microservicesText += `, a ${answers.languages[i]} microservice`;
-            }
-            microservicesText += ` and a ${answers.languages[answers.languages.length - 1]} microservice`;
-        }
-        let stateText = (answers.store !== "None") ? `. I'll also create the configuration files for a ${answers.store} state store` : "";
-        this.log(`${intro}${microservicesText}${stateText}`);
+        let microservices = this.answers.languages.map((language) => {
+            return { language };
+        });
+        this.app = Object.assign({}, this.answers, { microservices });
     }
     writing() {
         this._createDeployDirectory();
-        this._createMicroservices(this.answers.languages);
-        this._createStateManifest(this.answers.store);
+        this._createMicroservices();
+        this._createStateManifest();
         this._deleteTemp();
     }
     install() {
         this.log("Installing your packages:");
     }
     end() {
+        this._logScaffolding();
         // Give dapr run advice
-        this.log((this.answers.daprMode === "Kubernetes") ?
+        this.log((this.app.mode === "Kubernetes") ?
             "To run dapr in your Kubernetes cluster, download the dapr CLI (https://github.com/dapr/cli/releases) and run 'dapr init --kubernetes'." :
             "To run dapr in your Standalone mode, download the dapr CLI (https://github.com/dapr/cli/releases) and run 'dapr init'.");
         // Give dapr state advice
-        switch (this.answers.store) {
+        switch (this.app.stateStore) {
             case "Redis":
                 this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc)");
                 break;
@@ -94,16 +83,22 @@ class default_1 extends Generator {
         }
     }
     // Private methods
-    _createMicroservices(languages) {
-        languages.forEach((language) => this._createMicroservice(language));
+    _configureApp() {
     }
+    _createMicroservices() {
+        this.app.microservices.forEach((m) => this._createMicroservice(m.language));
+    }
+    /**
+     * This function takes a selected microservice and scaffolds the code for it. Note that as development of this generator continues, this function will likely grow in complexity to build the actual microservice code as well.
+     * @param language the language of the microservice
+     */
     _createMicroservice(language) {
         let directoryName;
         switch (language) {
-            case "C# (.NET Core)":
+            case "C#":
                 directoryName = "csharp";
                 break;
-            case "JavaScript (Node)":
+            case "JavaScript":
                 directoryName = "node";
                 break;
             case "Python":
@@ -124,9 +119,9 @@ class default_1 extends Generator {
     _deleteTemp() {
         this.fs.delete(this.destinationPath("deploy/tmp.txt"));
     }
-    _createStateManifest(store) {
+    _createStateManifest() {
         let manifestName;
-        switch (store) {
+        switch (this.app.stateStore) {
             case "Redis":
                 manifestName = "redis.yaml";
                 break;
@@ -136,10 +131,28 @@ class default_1 extends Generator {
             case "Cassandra":
                 manifestName = "cassandra.yaml";
                 break;
+            default:
+                return;
         }
-        if (store !== "None") {
-            this.fs.copyTpl(this.templatePath(`state-templates/${manifestName}`), this.destinationPath(`deploy/${manifestName}`), {});
+        this.fs.copyTpl(this.templatePath(`state-templates/${manifestName}`), this.destinationPath(`deploy/${manifestName}`), {});
+    }
+    _logScaffolding() {
+        let app = this.app;
+        let intro = `Great! I scaffolded a ${app.mode} dapr app called ${this.options.name || app.name}. The app includes`;
+        let microservicesText;
+        if (app.microservices.length === 0)
+            microservicesText = " no microservices";
+        if (app.microservices.length === 1)
+            microservicesText = ` a ${app.microservices[0].language} microservice`;
+        if (app.microservices.length > 1) {
+            microservicesText = ` a ${app.microservices[0].language} microservice`;
+            for (let i = 1; i < app.microservices.length - 1; i++) {
+                microservicesText += `, a ${app.microservices[i].language} microservice`;
+            }
+            microservicesText += ` and a ${app.microservices[app.microservices.length - 1].language} microservice`;
         }
+        let stateText = (app.stateStore !== "None") ? `. I also created the configuration files for a ${app.stateStore} state store.` : "";
+        this.log(`${intro}${microservicesText}${stateText}`);
     }
 }
 exports.default = default_1;
