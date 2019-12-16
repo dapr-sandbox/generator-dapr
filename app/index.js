@@ -1,54 +1,61 @@
-var Generator = require('yeoman-generator');
-
-module.exports = class extends Generator {
-
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Generator = require("yeoman-generator");
+class default_1 extends Generator {
     constructor(args, opts) {
         super(args, opts);
-
         this.argument("name", {
             type: String,
             required: false
         });
-
     }
-    async prompting() {
-        let prompts = [{
-                type: "list",
-                name: "daprMode",
-                message: "Are you running dapr in Kubernetes or in standalone mode?",
-                choices: ["Kubernetes", "Standalone"]
-            },
-            {
-                type: "checkbox",
-                name: "languages",
-                message: "What languages would you like to scaffold microservices for? (Use space bar to check the following)",
-                choices: ["C# (.NET Core)", "JavaScript (Node)", "Python", "Go"]
-            },
-            {
-                type: "list",
-                name: "store",
-                message: "What state store (if any) would you like your app to use? (Use space bar to check the following)",
-                choices: ["Redis", "CosmosDB", "Cassandra", "None"]
+    prompting() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let prompts = [{
+                    type: "list",
+                    name: "daprMode",
+                    message: "Are you running dapr in Kubernetes or in standalone mode?",
+                    choices: ["Kubernetes", "Standalone"]
+                },
+                {
+                    type: "checkbox",
+                    name: "languages",
+                    message: "What languages would you like to scaffold microservices for? (Use space bar to check the following)",
+                    choices: ["C# (.NET Core)", "JavaScript (Node)", "Python", "Go"]
+                },
+                {
+                    type: "list",
+                    name: "store",
+                    message: "What state store (if any) would you like your app to use? (Use space bar to check the following)",
+                    choices: ["Redis", "CosmosDB", "Cassandra", "None"]
+                }
+            ];
+            if (!this.options.name) {
+                prompts.unshift({
+                    type: "input",
+                    name: "name",
+                    message: "What would you like to call your dapr project?"
+                });
             }
-        ];
-        if (!this.options.name) {
-            prompts.unshift({
-                type: "input",
-                name: "name",
-                message: "What would you like to call your dapr project?",
-                default: this.appname // Default to current folder name
-            });
-        }
-        this.answers = await this.prompt(prompts);
+            this.answers = yield this.prompt(prompts);
+        });
     }
-
-
     configuring() {
         let answers = this.answers;
         let intro = `Great! I'm scaffolding you a ${answers.daprMode} dapr app called ${this.options.name || answers.name}. The app includes`;
         let microservicesText;
-        if (answers.languages.length === 0) microservicesText = " no microservices";
-        if (answers.languages.length === 1) microservicesText = ` a ${answers.languages[0]} microservice`;
+        if (answers.languages.length === 0)
+            microservicesText = " no microservices";
+        if (answers.languages.length === 1)
+            microservicesText = ` a ${answers.languages[0]} microservice`;
         if (answers.languages.length > 1) {
             microservicesText = ` a ${answers.languages[0]} microservice`;
             for (let i = 1; i < answers.languages.length - 1; i++) {
@@ -59,43 +66,37 @@ module.exports = class extends Generator {
         let stateText = (answers.store !== "None") ? `. I'll also create the configuration files for a ${answers.store} state store` : "";
         this.log(`${intro}${microservicesText}${stateText}`);
     }
-
     writing() {
         this._createDeployDirectory();
         this._createMicroservices(this.answers.languages);
         this._createStateManifest(this.answers.store);
         this._deleteTemp();
     }
-
     install() {
         this.log("Installing your packages:");
     }
-
     end() {
         // Give dapr run advice
         this.log((this.answers.daprMode === "Kubernetes") ?
             "To run dapr in your Kubernetes cluster, download the dapr CLI (https://github.com/dapr/cli/releases) and run 'dapr init --kubernetes'." :
             "To run dapr in your Standalone mode, download the dapr CLI (https://github.com/dapr/cli/releases) and run 'dapr init'.");
-
         // Give dapr state advice
         switch (this.answers.store) {
             case "Redis":
-                this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc)")
+                this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc)");
                 break;
             case "CosmosDB":
-                this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc)")
+                this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc)");
                 break;
             case "Cassandra":
-                this.log("Next you'll need to create a Cassandra store and add configuration details to your cassandra.yaml (see Cassandra dapr doc)")
+                this.log("Next you'll need to create a Cassandra store and add configuration details to your cassandra.yaml (see Cassandra dapr doc)");
                 break;
         }
     }
-
     // Private methods
     _createMicroservices(languages) {
         languages.forEach((language) => this._createMicroservice(language));
     }
-
     _createMicroservice(language) {
         let directoryName;
         switch (language) {
@@ -112,31 +113,17 @@ module.exports = class extends Generator {
                 directoryName = "go";
                 break;
         }
-
         // Create microservice code directory with boilerplate code
-        this.fs.copyTpl(
-            this.templatePath(directoryName),
-            this.destinationPath(directoryName)
-        );
-
+        this.fs.copyTpl(this.templatePath(directoryName), this.destinationPath(directoryName), {});
         // Create microservice manifest in deploy directory
-        this.fs.copyTpl(
-            this.templatePath(`deploy-templates/${directoryName}.yaml`),
-            this.destinationPath(`deploy/${directoryName}.yaml`)
-        );
+        this.fs.copyTpl(this.templatePath(`deploy-templates/${directoryName}.yaml`), this.destinationPath(`deploy/${directoryName}.yaml`), {});
     }
-
     _createDeployDirectory() {
-        this.fs.copyTpl(
-            this.templatePath("deploy"),
-            this.destinationPath("deploy")
-        );
+        this.fs.copyTpl(this.templatePath("deploy"), this.destinationPath("deploy"), {});
     }
-
     _deleteTemp() {
         this.fs.delete(this.destinationPath("deploy/tmp.txt"));
     }
-
     _createStateManifest(store) {
         let manifestName;
         switch (store) {
@@ -151,10 +138,10 @@ module.exports = class extends Generator {
                 break;
         }
         if (store !== "None") {
-            this.fs.copyTpl(
-                this.templatePath(`state-templates/${manifestName}`),
-                this.destinationPath(`deploy/${manifestName}`)
-            );
+            this.fs.copyTpl(this.templatePath(`state-templates/${manifestName}`), this.destinationPath(`deploy/${manifestName}`), {});
         }
     }
-};
+}
+exports.default = default_1;
+;
+//# sourceMappingURL=index.js.map
