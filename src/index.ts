@@ -3,7 +3,7 @@ import { Answers, Prompt, Prompts } from './types';
 
 export default class extends Generator {
     private answers: Answers;
-    constructor(args, opts) {
+    constructor(args: any, opts: any) {
         super(args, opts);
 
         this.argument("name", {
@@ -93,11 +93,11 @@ export default class extends Generator {
     }
 
     // Private methods
-    _createMicroservices(languages) {
+    _createMicroservices(languages: string[]) {
         languages.forEach((language) => this._createMicroservice(language));
     }
 
-    _createMicroservice(language) {
+    _createMicroservice(language: string) {
         let directoryName;
         switch (language) {
             case "C# (.NET Core)":
@@ -141,7 +141,7 @@ export default class extends Generator {
         this.fs.delete(this.destinationPath("deploy/tmp.txt"));
     }
 
-    _createStateManifest(store) {
+    _createStateManifest(store: string) {
         let manifestName;
         switch (store) {
             case "Redis":

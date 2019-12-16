@@ -4,7 +4,7 @@
         // "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "target": "es6",
-        // "noImplicitAny": true,
+        "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "app",
