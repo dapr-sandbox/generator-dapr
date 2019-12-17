@@ -51,6 +51,9 @@ export default class extends Generator {
         });
 
         this.app = { ...this.answers, microservices };
+
+        // If name was passed in as an option in the "yo dapr" command
+        if (!this.app.name) this.app.name = this.options.name;
     }
 
     writing() {
@@ -90,7 +93,7 @@ export default class extends Generator {
     }
 
     /**
-     * This function takes a selected microservice and scaffolds the code for it. Note that as development of this generator continues, this function will likely grow in complexity to build the actual microservice code as well.
+     * This function takes a selected microservice and scaffolds the code for it. Note that as development of this generator continues, this function will likely grow in complexity to codegen the actual microservice code as well.
      * @param language the language of the microservice
      */
     _createMicroservice(language: Language) {
@@ -113,14 +116,14 @@ export default class extends Generator {
         // Create microservice code directory with boilerplate code
         this.fs.copyTpl(
             this.templatePath(directoryName),
-            this.destinationPath(directoryName),
+            this.destinationPath(`${this.app.name}/${directoryName}`),
             {}
         );
 
         // Create microservice manifest in deploy directory
         this.fs.copyTpl(
             this.templatePath(`deploy-templates/${directoryName}.yaml`),
-            this.destinationPath(`deploy/${directoryName}.yaml`),
+            this.destinationPath(`${this.app.name}/deploy/${directoryName}.yaml`),
             {}
         );
     }
@@ -128,13 +131,13 @@ export default class extends Generator {
     _createDeployDirectory() {
         this.fs.copyTpl(
             this.templatePath("deploy"),
-            this.destinationPath("deploy"),
+            this.destinationPath(`${this.app.name}/deploy`),
             {}
         );
     }
 
     _deleteTemp() {
-        this.fs.delete(this.destinationPath("deploy/tmp.txt"));
+        this.fs.delete(this.destinationPath(`${this.app.name}/deploy/tmp.txt`));
     }
 
     _createStateManifest() {
@@ -154,7 +157,7 @@ export default class extends Generator {
         }
         this.fs.copyTpl(
             this.templatePath(`state-templates/${manifestName}`),
-            this.destinationPath(`deploy/${manifestName}`),
+            this.destinationPath(`${this.app.name}/deploy/${manifestName}`),
             {}
         );
     }
