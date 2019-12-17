@@ -1,5 +1,6 @@
 import * as Generator from 'yeoman-generator';
-import { Answers, App, Language, Microservice, Prompt, Prompts } from './types';
+import { Answers, App, Language, Microservice, Prompt, Prompts, StateStore, PubSub, Component } from './types';
+import { componentLookup, languageLookup } from './files';
 
 export default class extends Generator {
     private answers: Answers;
@@ -31,7 +32,13 @@ export default class extends Generator {
             type: "list",
             name: "stateStore",
             message: "What state store (if any) would you like your app to use? (Use space bar to check the following)",
-            choices: ["Redis", "CosmosDB", "Cassandra", "None"]
+            choices: ["Redis", "Azure CosmosDB", "None"]
+        },
+        {
+            type: "list",
+            name: "pubsub",
+            message: "What pubsub component (if any) would you like your app to use? (Use space bar to check the following)",
+            choices: ["Redis Streams", "NATS", "Azure Service Bus", "RabbitMQ", "None"]
         }
         ] as Prompts;
 
@@ -50,16 +57,20 @@ export default class extends Generator {
             return { language } as Microservice;
         });
 
-        this.app = { ...this.answers, microservices };
-
-        // If name was passed in as an option in the "yo dapr" command
-        if (!this.app.name) this.app.name = this.options.name;
+        this.app = {
+            name: (this.answers.name) ? this.answers.name : this.options.name,
+            mode: this.answers.mode,
+            stateStore: (this.answers.stateStore !== "None") ? this.answers.stateStore as StateStore : undefined,
+            pubsub: (this.answers.pubsub !== "None") ? this.answers.pubsub as PubSub : undefined,
+            microservices
+        };
     }
 
     writing() {
         this._createDeployDirectory();
         this._createMicroservices();
-        this._createStateManifest();
+        if (this.app.stateStore) this._createComponentManifest(this.app.stateStore);
+        if (this.app.pubsub) this._createComponentManifest(this.app.pubsub);
         this._deleteTemp();
     }
 
@@ -77,13 +88,10 @@ export default class extends Generator {
         // Give dapr state advice
         switch (this.app.stateStore) {
             case "Redis":
-                this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc)")
+                this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc: https://github.com/dapr/docs/blob/master/howto/setup-state-store/setup-redis.md)");
                 break;
-            case "CosmosDB":
-                this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc)")
-                break;
-            case "Cassandra":
-                this.log("Next you'll need to create a Cassandra store and add configuration details to your cassandra.yaml (see Cassandra dapr doc)")
+            case "Azure CosmosDB":
+                this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc: https://github.com/dapr/docs/blob/master/howto/setup-state-store/setup-azure-cosmosdb.md)");
                 break;
         }
     }
@@ -97,33 +105,19 @@ export default class extends Generator {
      * @param language the language of the microservice
      */
     _createMicroservice(language: Language) {
-        let directoryName;
-        switch (language) {
-            case "C#":
-                directoryName = "csharp";
-                break;
-            case "JavaScript":
-                directoryName = "node";
-                break;
-            case "Python":
-                directoryName = "python";
-                break;
-            case "Go":
-                directoryName = "go";
-                break;
-        }
+        let { codePath, manifestPath, languageName } = languageLookup[language];
 
         // Create microservice code directory with boilerplate code
         this.fs.copyTpl(
-            this.templatePath(directoryName),
-            this.destinationPath(`${this.app.name}/${directoryName}`),
+            this.templatePath(codePath),
+            this.destinationPath(`${this.app.name}/${languageName}`),
             {}
         );
 
         // Create microservice manifest in deploy directory
         this.fs.copyTpl(
-            this.templatePath(`deploy-templates/${directoryName}.yaml`),
-            this.destinationPath(`${this.app.name}/deploy/${directoryName}.yaml`),
+            this.templatePath(manifestPath),
+            this.destinationPath(`${this.app.name}/deploy/${languageName}.yaml`),
             {}
         );
     }
@@ -140,24 +134,12 @@ export default class extends Generator {
         this.fs.delete(this.destinationPath(`${this.app.name}/deploy/tmp.txt`));
     }
 
-    _createStateManifest() {
-        let manifestName;
-        switch (this.app.stateStore) {
-            case "Redis":
-                manifestName = "redis.yaml";
-                break;
-            case "CosmosDB":
-                manifestName = "cosmos.yaml";
-                break;
-            case "Cassandra":
-                manifestName = "cassandra.yaml";
-                break;
-            default:
-                return;
-        }
+    _createComponentManifest(component: Component) {
+        const { componentName, manifestPath } = componentLookup[component]
+        console.log(`Creating component manifest (${componentName}.yaml) for ${component}`);
         this.fs.copyTpl(
-            this.templatePath(`state-templates/${manifestName}`),
-            this.destinationPath(`${this.app.name}/deploy/${manifestName}`),
+            this.templatePath(manifestPath),
+            this.destinationPath(`${this.app.name}/deploy/${componentName}.yaml`),
             {}
         );
     }
@@ -181,7 +163,7 @@ export default class extends Generator {
                 message += ` and a ${app.microservices[app.microservices.length - 1].language} microservice`;
         }
 
-        message += (app.stateStore !== "None") ? `. I also created the configuration files for a ${app.stateStore} state store.` : "";
+        message += (app.stateStore) ? `. I also created the configuration files for a ${app.stateStore} state store.` : "";
         this.log(message);
     }
 };

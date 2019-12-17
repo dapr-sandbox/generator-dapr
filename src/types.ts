@@ -2,22 +2,25 @@
 type DaprMode = "Kubernetes" | "Standalone";
 
 // Supported languages
-export type Language = "JavaScript" | "TypeScript" | "Go" | "Python" | "C#";
+export type Language = "JavaScript" | "Go" | "Python" | "C#";
 
 // Supported state stores
-type StateStore = "Redis" | "CosmosDB" | "Cassandra" | "None";
+export type StateStore = "Redis" | "Azure CosmosDB";
+
+// Supported pubsub components
+export type PubSub = "Redis Streams" | "NATS" | "Azure Service Bus" | "RabbitMQ";
+
+export type Component = PubSub | StateStore;
 
 // Supported protocols
 type DaprProtocol = "HTTP" | "gRPC";
-
-// Supported pubsub components
-type PubSub = "Redis";
 
 export interface Answers {
     name: string,
     mode: DaprMode,
     languages: Language[],
-    store: string
+    stateStore: string,
+    pubsub: string
 }
 
 export interface Microservice {
@@ -55,3 +58,22 @@ export interface Prompt {
 }
 
 export type Prompts = Prompt[];
+
+interface MicroserviceDirectories {
+    languageName: string,
+    codePath: string,
+    manifestPath: string
+}
+
+interface ComponentDirectory {
+    componentName: string,
+    manifestPath: string
+}
+
+export type LanguageLookup = {
+    [key in Language]: MicroserviceDirectories;
+};
+
+export type ComponentLookup = {
+    [key in Component]: ComponentDirectory
+}
