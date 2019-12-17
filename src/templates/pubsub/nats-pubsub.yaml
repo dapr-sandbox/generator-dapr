@@ -1,0 +1,9 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: pubsub.nats
+  metadata:
+  - name: natsURL
+    value: <REPLACE-WITH-NATS-SERVER-ADDRESS> # Required. Example: "nats-client.default.svc.cluster.local:4222"

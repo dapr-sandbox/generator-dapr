@@ -1,0 +1,21 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: pubsub.azure.servicebus
+  metadata:
+  - name: connectionString
+    value: <REPLACE-WITH-CONNECTION-STRING> # Required.
+  - name: timeoutInSec
+    value: <REPLACE-WITH-TIMEOUT-IN-SEC> # Optional. Default: "60".
+  - name: disableEntityManagement
+    value: <REPLACE-WITH-DISABLE-ENTITY-MANAGEMENT> # Optional. Default: false. When set to true, topics and subscriptions do not get created automatically.
+  - name: maxDeliveryCount
+    value: <REPLACE-WITH-MAX-DELIVERY-COUNT> # Optional.
+  - name: lockDurationInSec
+    value: <REPLACE-WITH-LOCK-DURATION-IN-SEC> # Optional.
+  - name: defaultMessageTimeToLiveInSec
+    value: <REPLACE-WITH-MESSAGE-TIME-TO-LIVE-IN-SEC> # Optional.
+  - name: autoDeleteOnIdleInSec
+    value: <REPLACE-WITH-AUTO-DELETE-ON-IDLE-IN-SEC> # Optional.

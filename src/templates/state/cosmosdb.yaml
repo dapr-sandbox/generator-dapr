@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: state.azure.cosmosdb
+  metadata:
+  - name: url
+    value: <REPLACE-WITH-URL>
+  - name: masterKey
+    value: <REPLACE-WITH-MASTER-KEY>
+  - name: database
+    value: <REPLACE-WITH-DATABASE>
+  - name: collection
+    value: <REPLACE-WITH-COLLECTION>
