@@ -50,9 +50,7 @@ export default class extends Generator {
             return { language } as Microservice;
         });
 
-        this.app = {
-            ...this.answers, microservices
-        }
+        this.app = { ...this.answers, microservices };
     }
 
     writing() {
@@ -85,10 +83,6 @@ export default class extends Generator {
                 this.log("Next you'll need to create a Cassandra store and add configuration details to your cassandra.yaml (see Cassandra dapr doc)")
                 break;
         }
-    }
-
-    // Private methods
-    _configureApp() {
     }
 
     _createMicroservices() {
@@ -167,18 +161,24 @@ export default class extends Generator {
 
     _logScaffolding() {
         let app = this.app;
-        let intro = `Great! I scaffolded a ${app.mode} dapr app called ${this.options.name || app.name}. The app includes`;
-        let microservicesText;
-        if (app.microservices.length === 0) microservicesText = " no microservices";
-        if (app.microservices.length === 1) microservicesText = ` a ${app.microservices[0].language} microservice`;
-        if (app.microservices.length > 1) {
-            microservicesText = ` a ${app.microservices[0].language} microservice`;
-            for (let i = 1; i < app.microservices.length - 1; i++) {
-                microservicesText += `, a ${app.microservices[i].language} microservice`;
-            }
-            microservicesText += ` and a ${app.microservices[app.microservices.length - 1].language} microservice`;
+        let message = `Great! I scaffolded a ${app.mode} dapr app called ${this.options.name || app.name}. The app includes`;
+
+        switch (app.microservices.length) {
+            case 0:
+                message += " no microservices";
+                break;
+            case 1:
+                message += ` a ${app.microservices[0].language} microservice`;
+                break;
+            default:
+                message += ` a ${app.microservices[0].language} microservice`;
+                for (let i = 1; i < app.microservices.length - 1; i++) {
+                    message += `, a ${app.microservices[i].language} microservice`;
+                }
+                message += ` and a ${app.microservices[app.microservices.length - 1].language} microservice`;
         }
-        let stateText = (app.stateStore !== "None") ? `. I also created the configuration files for a ${app.stateStore} state store.` : "";
-        this.log(`${intro}${microservicesText}${stateText}`);
+
+        message += (app.stateStore !== "None") ? `. I also created the configuration files for a ${app.stateStore} state store.` : "";
+        this.log(message);
     }
 };
