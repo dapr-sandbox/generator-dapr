@@ -48,7 +48,7 @@ app.post('/persistNumber', async (req, res) => {
 // ============================== STATE ===============================
 
 /**
- * An example of to persist a key value pair with dapr. Note that we're not waiting for an affirmation that state was persisted successfully. To enable this, we could add add a .then function to our promise or use async/await syntax to await the promise's resolution.
+ * A demonstration of persisting a key value pair with dapr
  * @param {string} key 
  * @param {any} value 
  */
