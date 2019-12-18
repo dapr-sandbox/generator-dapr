@@ -12,18 +12,37 @@ const port = 3000;
 // ======================== SERVICE INVOCATION ========================
 
 /**
- * Other dapr microservices invoke this function by performing a GET request against http://localhost:<DAPR_PORT>/v1.0/nodeapp/method/function.
- * "nodeapp" is the name of this microservice (seen in the node.yaml manifest) and "function" is the name of this endpoint.
+ * Returns a random number to the caller.
+ * Other dapr microservices invoke this function by performing a GET request against http://localhost:<DAPR_PORT>/v1.0/invoke/javascript-microservice/method/randomNumber.
+ * "javascript-microservice" is the name of this microservice (seen in the javascript.yaml manifest or specified in dapr run command) and "randomNumber" is the name of this endpoint.
  */
-app.get('/function', (_req, res) => {
-
+app.get('/randomNumber', (_req, res) => {
+    res.status(200).send({
+        randomNumber: Math.ceil(Math.random() * 100)
+    });
 });
 
 /**
- * Other dapr microservices invoke this function by performing a POST request against http://localhost:<DAPR_PORT>/v1.0/nodeapp/method/function2
+ * Returns the current set number. If no number has been set, returns a 404 with an error message.
  */
-app.post('/function2', (req, res) => {
-    
+app.get('/currentNumber', async (_req, res) => {
+    try {
+        let number = await getState("currentNumber");
+        res.send({
+            currentNumber: number
+        });
+    } catch (err) {
+        res.status(404).send("Could not get current number. Have you set a number?");
+    }
+});
+
+/**
+ * Sets the current number, taking a JSON object with a "number" property. 
+ * Other dapr microservices invoke this function by performing a POST request against http://localhost:<DAPR_PORT>/v1.0/invoke/javascript-microservice/method/persistNumber
+ */
+app.post('/persistNumber', async (req, res) => {
+    const response = await persistState("currentNumber", req.body.number);
+    res.send(response.statusCode ? 200 : response.statusCode);
 });
 
 // ============================== STATE ===============================
@@ -33,7 +52,7 @@ app.post('/function2', (req, res) => {
  * @param {string} key 
  * @param {any} value 
  */
-const persistState = (key, value) => {
+const persistState = async (key, value) => {
     const options = {
         method: "POST",
         body: JSON.stringify([{
@@ -44,7 +63,8 @@ const persistState = (key, value) => {
             "Content-Type": "application/json"
         }
     };
-    fetch(stateUrl, options);
+    const response = await fetch(stateUrl, options);
+    return response;
 }
 
 /**
@@ -53,7 +73,7 @@ const persistState = (key, value) => {
  */
 const getState = async (key) => {
     const response = await fetch(`${stateUrl}/${key}`);
-    console.log(response);
+    return await response.json();
 }
 
 // ============================== PUBSUB ==============================
