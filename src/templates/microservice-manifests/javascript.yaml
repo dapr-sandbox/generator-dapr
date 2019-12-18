@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javascript-microservice
+  labels:
+    app: javascript-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: javascript-microservice
+  template:
+    metadata:
+      labels:
+        app: javascript-microservice
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "javascript-microservice"
+        dapr.io/port: "3000"
+    spec:
+      containers:
+      - name: javascript-microservice
+        image: <YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_IMAGE>
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
