@@ -1,6 +1,3 @@
-// Supported dapr modes
-type DaprMode = "Kubernetes" | "Standalone";
-
 // Supported languages
 export type Language = "JavaScript" | "Go" | "Python" | "C#";
 
@@ -17,7 +14,6 @@ type DaprProtocol = "HTTP" | "gRPC";
 
 export interface Answers {
     name: string,
-    mode: DaprMode,
     languages: Language[],
     stateStore: string,
     pubsub: string
@@ -39,9 +35,8 @@ export interface Microservice {
 }
 
 export interface App {
+    /** The name of the dapr application */
     name: string;
-    /** Indicates whether the dapr app is running in Kubernetes or in Standalone mode. */
-    mode: DaprMode;
     /** The microservices that compose the dapr application. */
     microservices: Microservice[];
     /** The state store to be used by the dapr application. */

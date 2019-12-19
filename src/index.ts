@@ -18,30 +18,25 @@ export default class extends Generator {
 
     }
     async prompting() {
-        let prompts = [{
-            type: "list",
-            name: "mode",
-            message: "Are you running dapr in Kubernetes or in standalone mode?",
-            choices: ["Kubernetes", "Standalone"]
-        },
-        {
-            type: "checkbox",
-            name: "languages",
-            message: "What languages would you like to scaffold microservices for? (Use space bar to check the following)",
-            choices: ["C#", "Go", "JavaScript", "Python"]
-        },
-        {
-            type: "list",
-            name: "stateStore",
-            message: "What state store (if any) would you like your app to use? (Use space bar to check the following)",
-            choices: ["Redis", "Azure CosmosDB", "None"]
-        },
-        {
-            type: "list",
-            name: "pubsub",
-            message: "What pubsub component (if any) would you like your app to use? (Use space bar to check the following)",
-            choices: ["Redis Streams", "NATS", "Azure Service Bus", "RabbitMQ", "None"]
-        }
+        let prompts = [
+            {
+                type: "checkbox",
+                name: "languages",
+                message: "What languages would you like to scaffold microservices for? (Use space bar to check the following)",
+                choices: ["C#", "Go", "JavaScript", "Python"]
+            },
+            {
+                type: "list",
+                name: "stateStore",
+                message: "What state store (if any) would you like your app to use? (Use space bar to check the following)",
+                choices: ["Redis", "Azure CosmosDB", "None"]
+            },
+            {
+                type: "list",
+                name: "pubsub",
+                message: "What pubsub component (if any) would you like your app to use? (Use space bar to check the following)",
+                choices: ["Redis Streams", "NATS", "Azure Service Bus", "RabbitMQ", "None"]
+            }
         ] as Prompts;
 
         if (!this.options.name) {
@@ -64,7 +59,6 @@ export default class extends Generator {
 
         this.app = {
             name: (this.answers.name) ? this.answers.name : this.options.name,
-            mode: this.answers.mode,
             stateStore: (this.answers.stateStore !== "None") ? this.answers.stateStore as StateStore : undefined,
             pubsub: (this.answers.pubsub !== "None") ? this.answers.pubsub as PubSub : undefined,
             microservices
@@ -88,9 +82,7 @@ export default class extends Generator {
     end() {
         this._logScaffolding();
         // Give dapr run advice
-        this.log((this.app.mode === "Kubernetes") ?
-            "To run dapr in your Kubernetes cluster, download the dapr CLI (https://github.com/dapr/cli/releases) and run 'dapr init --kubernetes'." :
-            "To run dapr in your Standalone mode, download the dapr CLI (https://github.com/dapr/cli/releases) and run 'dapr init'.");
+        this.log("To run your dapr dapr app, download the dapr CLI (https://github.com/dapr/cli/releases). To run in Kubernetes, run 'dapr init --kubernetes'. To run in self-hosted mode, run 'dapr init'. Then follow instructions in each microservice's README to install packages and build your build/run your microservices.");
 
         // Give dapr state advice
         switch (this.app.stateStore) {
@@ -170,7 +162,7 @@ export default class extends Generator {
 
     _logScaffolding() {
         let app = this.app;
-        let message = `Great! I scaffolded a ${app.mode} dapr app called ${this.options.name || app.name}. The app includes`;
+        let message = `Great! I scaffolded a dapr app called ${this.options.name || app.name}. The app includes`;
 
         switch (app.microservices.length) {
             case 0:
