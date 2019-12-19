@@ -1,5 +1,5 @@
 // Supported languages
-export type Language = "JavaScript" | "Go" | "Python" | "C#";
+export type Language = "JavaScript" | "Go" | "Python" | "C#" | "TypeScript";
 
 // Supported state stores
 export type StateStore = "Redis" | "Azure CosmosDB";

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: typescript-microservice
+  labels:
+    app: typescript-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: typescript-microservice
+  template:
+    metadata:
+      labels:
+        app: typescript-microservice
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "typescript-microservice"
+        dapr.io/port: "3001"
+    spec:
+      containers:
+      - name: typescript-microservice
+        image: <YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_IMAGE>
+        ports:
+        - containerPort: 3001
+        imagePullPolicy: Always

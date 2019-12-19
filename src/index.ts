@@ -22,7 +22,7 @@ export default class extends Generator {
                 type: "checkbox",
                 name: "languages",
                 message: "What languages would you like to scaffold microservices for? (Use space bar to check the following)",
-                choices: ["C#", "Go", "JavaScript", "Python"]
+                choices: ["C#", "Go", "JavaScript", "Python", "TypeScript"]
             },
             {
                 type: "list",

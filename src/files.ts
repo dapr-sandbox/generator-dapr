@@ -47,5 +47,10 @@ export const languageLookup: LanguageLookup = {
         languageName: "go",
         codePath: "languages/go",
         manifestPath: "microservice-manifests/go.yaml"
+    },
+    "TypeScript": {
+        languageName: "typescript",
+        codePath: "languages/typescript",
+        manifestPath: "microservice-manifests/typescript.yaml"
     }
 }
