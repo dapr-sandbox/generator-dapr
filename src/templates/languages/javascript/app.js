@@ -42,7 +42,7 @@ app.get('/currentNumber', async (_req, res) => {
  */
 app.post('/persistNumber', async (req, res) => {
     const response = await persistState("currentNumber", req.body.number);
-    res.send(response.statusCode ? 200 : response.statusCode);
+    res.send(response.status ? 200 : response.status);
 });
 
 // ============================== STATE ===============================
