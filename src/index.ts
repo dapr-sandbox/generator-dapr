@@ -6,7 +6,6 @@ import * as emoji from 'node-emoji';
 export default class extends Generator {
     private answers: Answers;
     private app: App;
-    private publicEndpoints: Set<string>;
 
     constructor(args: any, opts: any) {
         super(args, opts);
@@ -47,13 +46,11 @@ export default class extends Generator {
             } as Prompt);
         }
         this.answers = await this.prompt(prompts);
-        await this._getPublicEndpoints();
     }
 
     async configuring() {
         let microservices = this.answers.languages.map((language) => {
             let microservice = { language } as Microservice;
-            microservice.externalEndpoint = this.publicEndpoints.has(language);
             return microservice;
         });
 
@@ -142,22 +139,6 @@ export default class extends Generator {
             this.destinationPath(`${this.app.name}/deploy/${componentName}.yaml`),
             {}
         );
-    }
-
-    async _getPublicEndpoints() {
-
-        if (this.answers.languages.length > 0) {
-            let publicEndpointPrompt = [{
-                type: "checkbox",
-                name: "publicEndpoints",
-                message: "Which of these microservices should expose a public endpoint?",
-                choices: this.answers.languages
-            }];
-
-            let answer = await this.prompt(publicEndpointPrompt);
-            // Creates the set of microservices (named by language) that should have public endpoints. 
-            this.publicEndpoints = new Set(answer["publicEndpoints"] as string[]);
-        }
     }
 
     _logScaffolding() {
