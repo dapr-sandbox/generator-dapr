@@ -1,10 +1,12 @@
 import * as Generator from 'yeoman-generator';
 import { Answers, App, Language, Microservice, Prompt, Prompts, StateStore, PubSub, Component } from './types';
 import { componentLookup, languageLookup } from './files';
+import * as emoji from 'node-emoji';
 
 export default class extends Generator {
     private answers: Answers;
     private app: App;
+    private publicEndpoints: Set<string>;
 
     constructor(args: any, opts: any) {
         super(args, opts);
@@ -50,11 +52,14 @@ export default class extends Generator {
             } as Prompt);
         }
         this.answers = await this.prompt(prompts);
+        await this._getPublicEndpoints();
     }
 
-    configuring() {
+    async configuring() {
         let microservices = this.answers.languages.map((language) => {
-            return { language } as Microservice;
+            let microservice = { language } as Microservice;
+            microservice.externalEndpoint = this.publicEndpoints.has(language);
+            return microservice;
         });
 
         this.app = {
@@ -64,6 +69,9 @@ export default class extends Generator {
             pubsub: (this.answers.pubsub !== "None") ? this.answers.pubsub as PubSub : undefined,
             microservices
         };
+
+        console.log("Configuring the following app:");
+        console.log(this.app);
     }
 
     writing() {
@@ -75,7 +83,6 @@ export default class extends Generator {
     }
 
     install() {
-        this.log("Installing your packages:");
     }
 
     end() {
@@ -106,7 +113,7 @@ export default class extends Generator {
      */
     _createMicroservice(language: Language) {
         let { codePath, manifestPath, languageName } = languageLookup[language];
-
+        console.log(emoji.get('heavy_check_mark'), ` Creating ${language} microservice code`);
         // Create microservice code directory with boilerplate code
         this.fs.copyTpl(
             this.templatePath(codePath),
@@ -114,6 +121,7 @@ export default class extends Generator {
             {}
         );
 
+        console.log(emoji.get('heavy_check_mark'), ` Creating ${language} manifest`);
         // Create microservice manifest in deploy directory
         this.fs.copyTpl(
             this.templatePath(manifestPath),
@@ -136,12 +144,28 @@ export default class extends Generator {
 
     _createComponentManifest(component: Component) {
         const { componentName, manifestPath } = componentLookup[component]
-        console.log(`Creating component manifest (${componentName}.yaml) for ${component}`);
+        console.log(emoji.get('heavy_check_mark'), ` Creating component manifest (${componentName}.yaml) for ${component}`);
         this.fs.copyTpl(
             this.templatePath(manifestPath),
             this.destinationPath(`${this.app.name}/deploy/${componentName}.yaml`),
             {}
         );
+    }
+
+    async _getPublicEndpoints() {
+
+        if (this.answers.languages.length > 0) {
+            let publicEndpointPrompt = [{
+                type: "checkbox",
+                name: "publicEndpoints",
+                message: "Which of these microservices should expose a public endpoint?",
+                choices: this.answers.languages
+            }];
+
+            let answer = await this.prompt(publicEndpointPrompt);
+            // Creates the set of microservices (named by language) that should have public endpoints. 
+            this.publicEndpoints = new Set(answer["publicEndpoints"] as string[]);
+        }
     }
 
     _logScaffolding() {
