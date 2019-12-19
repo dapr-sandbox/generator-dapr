@@ -25,7 +25,7 @@ See [dapr docs](https://github.com/dapr/docs) and [docr samples](https://github.
 
 ## Who should use this?
 
-The target audience for this generator is developers familiar with distributed systems concepts (e.g. microservices, state, pubsub) who want to _quickly_ scaffold a dapr project. The target audience **does not** need to be familiar with any specific programming language, and should instead be able to use whatever mainstream language they choose, along with concepts idiomatic to that language. This demographic can be broken into two sub-demographics:
+The target audience for this generator is developers familiar with distributed systems concepts (e.g. microservices, state, pubsub) who want to _quickly_ scaffold a dapr project. The target audience **does not** need to be familiar with any specific programming language, and should instead be able to use whatever mainstream language they choose, along with concepts idiomatic to that language. This audience can be bisected into two sub-audiences:
 
 1. **Developers with cloud-native experience**: For developers with experience using containers and Kubernetes, this generator aims to make it easier to minimize the time spent searching for manifests (e.g. Redis, Kafka), building Dockerfiles, and exercising dapr features.
 
