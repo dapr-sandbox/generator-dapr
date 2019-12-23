@@ -64,9 +64,8 @@ Now you can verify that your state was persisted:
 ```cmd
 C:\git\test>dapr invoke --app-id js --verb "GET" -m savedNumber
 {number: 42}
+App invoked successfully
 ```
-
-<<Add Output>>
 
 Now you can tweak your code to get and set any state with your microservice! See state doc<<Insert doc>> and state sample <<Insert sample>> for more details.
 
@@ -109,9 +108,14 @@ To deploy this microservice to Kubernetes, you first need to containerize it. Yo
 5. Apply your Kubernetes manifest: `kubectl apply -f javascript.yaml`
 
     > If you're using a private container registry, you'll need to add the appropriate credentials to the javascript.yaml files
-6. Run `kubectl get pods -w` to see your pod spin up!
+6. Run `kubectl get pods -w` to see your pod spin up:
 
-<<OUTPUT>>
+```cmd
+NAME                                      READY   STATUS             RESTARTS   AGE
+javascript-microservice-56c74595d-htrk4   2/2     Running            0          6s
+```
+
+Once deployed, you should see that 2/2 containers are running for the deployment. This represents the container that hosts your microservice and the container that hosts the dapr runtime.
 
 ### Build and Deploy using the Make file
 
@@ -135,16 +139,39 @@ To invoke this microservice's endpoints from another dapr microservice, create r
 
 To test these endpoints on their own, or to expose them publicly, follow the following steps:
 
-1. Add a LoadBalancer to your javascript.yaml:
+1. Add a LoadBalancer to the top of your javascript.yaml:
 
-    <<Insert LoadBalancer code>>
+```yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: javascript-service
+  labels:
+    app: javascript-service
+spec:
+  selector:
+    app: javascript-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+```
 
 2. Reapply your javascript.yaml file: `kubectl apply -f javascript.yaml`
 3. Wait for the public endpoint to be configured: `kubectl get svc -w`
-4. Use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
+
+```cmd
+NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
+javascript-service             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
+```
+
+4. Once the external-ip changes from pending to an IP adress, use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
 
 - GET http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/js/method/randomNumber
 - POST http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/js/method/saveNumber with JSON payload (e.g. {number: 42})
 - GET http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/js/method/savedNumber
 
 #### Publish messages
+
+To publish messages that this microservice subscribes to, 
