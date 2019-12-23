@@ -88,12 +88,12 @@ app.get('/dapr/subscribe', (_req, res) => {
     ]);
 });
 
-app.post('/A', (req, res) => {
+app.post('/A', (req, _res) => {
     console.log("Got message of topic 'A'");
     console.log(req.body);
 });
 
-app.post('/B', (req, res) => {
+app.post('/B', (req, _res) => {
     console.log("Got message of topic 'B'");
     console.log(req.body);
 });
