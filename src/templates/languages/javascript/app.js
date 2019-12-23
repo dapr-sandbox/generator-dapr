@@ -13,7 +13,7 @@ const port = 3000;
 
 /**
  * Returns a random number to the caller.
- * Other dapr microservices invoke this function by performing a GET request against http://localhost:<DAPR_PORT>/v1.0/invoke/javascript-microservice/method/randomNumber.
+ * Other dapr microservices invoke this function by performing a GET request against http://localhost:<DAPR_PORT>/v1.0/invoke/js/method/randomNumber.
  * "javascript-microservice" is the name of this microservice (seen in the javascript.yaml manifest or specified in dapr run command) and "randomNumber" is the name of this endpoint.
  */
 app.get('/randomNumber', (_req, res) => {
@@ -25,23 +25,23 @@ app.get('/randomNumber', (_req, res) => {
 /**
  * Returns the current set number. If no number has been set, returns a 404 with an error message.
  */
-app.get('/currentNumber', async (_req, res) => {
+app.get('/savedNumber', async (_req, res) => {
     try {
-        let number = await getState("currentNumber");
+        let savedNumber = await getState("savedNumber");
         res.send({
-            currentNumber: number
+            savedNumber
         });
     } catch (err) {
-        res.status(404).send("Could not get current number. Have you set a number?");
+        res.status(404).send("Could not get current number. Did you save a number by POSTing against '/saveNumber'?");
     }
 });
 
 /**
  * Sets the current number, taking a JSON object with a "number" property. 
- * Other dapr microservices invoke this function by performing a POST request against http://localhost:<DAPR_PORT>/v1.0/invoke/javascript-microservice/method/persistNumber
+ * Other dapr microservices invoke this function by performing a POST request against http://localhost:<DAPR_PORT>/v1.0/invoke/js/method/persistNumber
  */
-app.post('/persistNumber', async (req, res) => {
-    const response = await persistState("currentNumber", req.body.number);
+app.post('/saveNumber', async (req, res) => {
+    const response = await persistState("savedNumber", req.body.number);
     res.send(response.status ? 200 : response.status);
 });
 
@@ -86,6 +86,16 @@ app.get('/dapr/subscribe', (_req, res) => {
         'A',
         'B'
     ]);
+});
+
+app.post('/A', (req, _res) => {
+    console.log("Got message of topic 'A'");
+    console.log(req.body);
+});
+
+app.post('/B', (req, _res) => {
+    console.log("Got message of topic 'B'");
+    console.log(req.body);
 });
 
 app.listen(port, () => console.log(`Node App listening on port ${port}!`));
