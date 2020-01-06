@@ -66,11 +66,13 @@ export default class extends Generator {
     }
 
     writing() {
-        this._createDeployDirectory();
+        this._createDirectory("deploy");
+        this._createDirectory("components");
         this._createMicroservices();
         if (this.app.stateStore) this._createComponentManifest(this.app.stateStore);
         if (this.app.pubsub) this._createComponentManifest(this.app.pubsub);
-        this._deleteTemp();
+        this._deleteTempFile("deploy");
+        this._deleteTempFile("components");
     }
 
     install() {
@@ -119,24 +121,33 @@ export default class extends Generator {
         );
     }
 
-    _createDeployDirectory() {
+    _createDirectory(name: string) {
         this.fs.copyTpl(
-            this.templatePath("deploy"),
-            this.destinationPath(`${this.app.name}/deploy`),
+            this.templatePath(name),
+            this.destinationPath(`${this.app.name}/${name}`),
             {}
         );
     }
 
-    _deleteTemp() {
-        this.fs.delete(this.destinationPath(`${this.app.name}/deploy/tmp.txt`));
+    _deleteTempFile(name: string) {
+        this.fs.delete(this.destinationPath(`${this.app.name}/${name}/tmp.txt`));
     }
 
     _createComponentManifest(component: Component) {
-        const { componentName, manifestPath } = componentLookup[component]
+        const { componentName, manifestPath } = componentLookup[component];
         console.log(emoji.get('heavy_check_mark'), ` Creating component manifest (${componentName}.yaml) for ${component}`);
+        
+        //For Kubernetes 
         this.fs.copyTpl(
             this.templatePath(manifestPath),
             this.destinationPath(`${this.app.name}/deploy/${componentName}.yaml`),
+            {}
+        );
+
+        //For Self-Hosted 
+        this.fs.copyTpl(
+            this.templatePath(manifestPath),
+            this.destinationPath(`${this.app.name}/components/${componentName}.yaml`),
             {}
         );
     }
