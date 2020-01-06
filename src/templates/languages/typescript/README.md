@@ -9,7 +9,7 @@ First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases
 
 ### Steps
 
-1. Navigate to the `typescript` directory
+1. Navigate to the `typescript` directory: `cd typescript`
 2. Run `npm install` to gather dependencies
 3. Run `npm run build` to compile your Typescript code into Javascript code (which lives in the `lib` directory)
 4. Run the compiled application with dapr with dapr:

@@ -9,7 +9,7 @@ First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases
 
 ### Steps
 
-1. Navigate to the `go` directory
+1. Navigate to the `go` directory: `cd go`
 2. Run `app.go` with dapr:
 
 ```bash

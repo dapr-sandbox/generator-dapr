@@ -9,7 +9,7 @@ First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases
 
 ### Steps
 
-1. Navigate to the `javascript` directory
+1. Navigate to the `javascript` directory: `cd javascript`
 2. Run `npm install` to gather dependencies
 3. Run `app.js` with dapr:
 
