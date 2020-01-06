@@ -87,7 +87,7 @@ Now you're able to use dapr to build pubsub applications! Update the topics your
 
 ## Deploy in Kubernetes
 
-To deploy this microservice to Kubernetes, you first need to containerize it. You can do this by building the docker images manually or you can use the Makefile included in the the generated project.
+To deploy this microservice to Kubernetes, you first need to containerize it.
 
 ### Prerequisites
 
@@ -96,9 +96,8 @@ To deploy this microservice to Kubernetes, you first need to containerize it. Yo
 - Kubectl configured with your cluster
 - Dapr initialized in your cluster: `dapr init --kubernetes`
 - A dockerhub account or a container registry to push your container images up to
-- [Make](https://www.gnu.org/software/make/), if you choose to use the Makefile
 
-### Build and Deploy Manually
+### Build and Deploy
 
 1. Navigate to the javascript directory: `cd javascript`
 2. Run `docker build --tag [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME] .`
@@ -115,14 +114,6 @@ javascript-microservice-56c74595d-htrk4   2/2     Running            0          
 ```
 
 Once deployed, you should see that 2/2 containers are running for the deployment. This represents the container that hosts your microservice and the container that hosts the dapr runtime.
-
-### Build and Deploy using the Make file **NOT YET IMPLEMENTED**
-
-1. Navigate to the top level of your project and open the Makefile
-2. Update [[INSERT VARIABLES]] to represent your container registry and your 
-2. Run make build ... which will build container images for all of the microservices in your project
-3. Run make push ... which will push 
-4. Run kubectl apply -f "javascript.yaml"
 
 ### Use your app in Kubernetes
 
