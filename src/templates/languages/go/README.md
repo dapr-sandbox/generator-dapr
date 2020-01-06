@@ -5,7 +5,7 @@ This is a yeoman-generated dapr-enabled Go microservice. You can either run it i
 
 ### Prerequisites
 
-First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases) and run `dapr init`. This will run the dapr runtime on your machine. Further, you'll need 
+First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases) and run `dapr init`. This will run the dapr runtime on your machine. You will also need to have Go installed on your machine.
 
 ### Steps
 
