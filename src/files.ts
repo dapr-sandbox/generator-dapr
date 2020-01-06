@@ -1,6 +1,6 @@
-import { LanguageLookup, ComponentLookup } from './types';
+import { LanguageTemplates, ComponentTemplates } from './types';
 
-export const componentLookup: ComponentLookup = {
+export const componentTemplates: ComponentTemplates = {
     "Redis": {
         componentName: "redis",
         manifestPath: "state/redis.yaml"
@@ -27,30 +27,35 @@ export const componentLookup: ComponentLookup = {
     }
 }
 
-export const languageLookup: LanguageLookup = {
+export const languageTemplates: LanguageTemplates = {
     "C#": {
         languageName: "csharp",
         codePath: "languages/csharp",
-        manifestPath: "microservice-manifests/csharp.yaml"
+        manifestPath: "microservice-manifests/csharp.yaml",
+        port: 80
     },
     "Python": {
         languageName: "python",
         codePath: "languages/python",
-        manifestPath: "microservice-manifests/python.yaml"
+        manifestPath: "microservice-manifests/python.yaml",
+        port: 5000
     },
     "JavaScript": {
         languageName: "javascript",
         codePath: "languages/javascript",
-        manifestPath: "microservice-manifests/javascript.yaml"
+        manifestPath: "microservice-manifests/javascript.yaml",
+        port: 3000
     },
     "Go": {
         languageName: "go",
         codePath: "languages/go",
-        manifestPath: "microservice-manifests/go.yaml"
+        manifestPath: "microservice-manifests/go.yaml",
+        port: 6000
     },
     "TypeScript": {
         languageName: "typescript",
         codePath: "languages/typescript",
-        manifestPath: "microservice-manifests/typescript.yaml"
+        manifestPath: "microservice-manifests/typescript.yaml",
+        port: 3001
     }
 }

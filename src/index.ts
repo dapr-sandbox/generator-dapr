@@ -1,6 +1,6 @@
 import * as Generator from 'yeoman-generator';
 import { Answers, App, Language, Microservice, Prompt, Prompts, StateStore, PubSub, Component } from './types';
-import { componentLookup, languageLookup } from './files';
+import { componentTemplates, languageTemplates } from './files';
 import * as emoji from 'node-emoji';
 
 export default class extends Generator {
@@ -103,7 +103,7 @@ export default class extends Generator {
      * @param language the language of the microservice
      */
     _createMicroservice(language: Language) {
-        let { codePath, manifestPath, languageName } = languageLookup[language];
+        let { codePath, manifestPath, languageName } = languageTemplates[language];
         console.log(emoji.get('heavy_check_mark'), ` Creating ${language} microservice code`);
         // Create microservice code directory with boilerplate code
         this.fs.copyTpl(
@@ -134,7 +134,7 @@ export default class extends Generator {
     }
 
     _createComponentManifest(component: Component) {
-        const { componentName, manifestPath } = componentLookup[component];
+        const { componentName, manifestPath } = componentTemplates[component];
         console.log(emoji.get('heavy_check_mark'), ` Creating component manifest (${componentName}.yaml) for ${component}`);
         
         //For Kubernetes 

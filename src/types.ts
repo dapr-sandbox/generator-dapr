@@ -54,21 +54,23 @@ export interface Prompt {
 
 export type Prompts = Prompt[];
 
-interface MicroserviceDirectories {
+interface LanguageTemplate {
     languageName: string,
     codePath: string,
-    manifestPath: string
+    manifestPath: string,
+    port: number,
+    installationInstructions?: string
 }
 
-interface ComponentDirectory {
+interface ComponentTemplate {
     componentName: string,
     manifestPath: string
 }
 
-export type LanguageLookup = {
-    [key in Language]: MicroserviceDirectories;
+export type LanguageTemplates = {
+    [key in Language]: LanguageTemplate;
 };
 
-export type ComponentLookup = {
-    [key in Component]: ComponentDirectory
+export type ComponentTemplates = {
+    [key in Component]: ComponentTemplate
 }
