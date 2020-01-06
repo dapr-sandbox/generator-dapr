@@ -42,7 +42,7 @@ func randomNumber(w http.ResponseWriter, r *http.Request) {
 }
 
 func getSavedNumber(w http.ResponseWriter, r *http.Request) {
-	response, err := http.Get("http://localhost:3500/v1.0/state/savedNumbers")
+	response, err := http.Get("http://localhost:3500/v1.0/state/savedNumber")
 	if err != nil {
         fmt.Printf("%s", err)
     } else {
