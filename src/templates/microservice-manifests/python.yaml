@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-microservice
+  labels:
+    app: python-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-microservice
+  template:
+    metadata:
+      labels:
+        app: python-microservice
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "python-microservice"
+        dapr.io/port: "5000"
+    spec:
+      containers:
+      - name: python-microservice
+        image: <YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_IMAGE>
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always

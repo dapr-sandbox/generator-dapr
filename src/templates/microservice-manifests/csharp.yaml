@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: csharp-microservice
+  labels:
+    app: csharp-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subtracsharp-microservicect
+  template:
+    metadata:
+      labels:
+        app: csharp-microservice
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "csharp-microservice"
+        dapr.io/port: "80"
+    spec:
+      containers:
+      - name: csharp-microservice
+        image: <YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_IMAGE>
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
