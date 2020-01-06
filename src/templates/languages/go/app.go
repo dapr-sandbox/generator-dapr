@@ -87,6 +87,7 @@ func subscribe(w http.ResponseWriter, r *http.Request) {
 }
 
 func topicAHandler(w http.ResponseWriter, r *http.Request){
+	fmt.Println("Got message of topic 'A'");
 	var jsonValue map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(&jsonValue)
 	if err != nil {
@@ -97,6 +98,7 @@ func topicAHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func topicBHandler(w http.ResponseWriter, r *http.Request){
+	fmt.Println("Got message of topic 'B'");
 	var jsonValue map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(&jsonValue)
 	if err != nil {
