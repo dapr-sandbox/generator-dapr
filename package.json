@@ -1,6 +1,6 @@
 {
   "name": "generator-dapr",
-  "version": "0.0.72",
+  "version": "0.0.73",
   "description": "A generator to scaffold dapr projects (see dapr.io)",
   "files": [
     "app"
@@ -9,10 +9,6 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/templates/**/* app"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ryanvolum/generator-dapr"
   },
   "keywords": [
     "yeoman-generator"
