@@ -17,7 +17,7 @@ First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases
 dapr run --app-id py --app-port 5000 --port 3500 python app.py
 ```
 
-In this case we've named the microservice "py", specified that it runs on port 5000, and specified that the dapr runtime should run on port 3500. 
+In this case we've named the microservice "py", specified that it runs on port 5000, and specified that the dapr runtime should run on port 3500. Note that if other microservices are already using 3500, you should change this to some other value.
 
 > Note that the dapr cli will automatically configure a Redis store and Redis pubsub component, with component manifests in a "components" directory (`redis.yaml` and `redis_messagebus.yaml` respectively). If you selected non-Redis components (e.g. Cosmos, NATS) that you want to run in self-hosted mode, copy the generated `components` directory into your microservice's directory. `dapr run` will look for the `components` directory and use the components specified there instead of Redis if found. This step will no longer be necessary when [Issue 225](https://github.com/dapr/cli/issues/225) is resolved.
 
@@ -25,8 +25,8 @@ To see that the microservice is running, open a new terminal window and list dap
 
 ```cmd
 C:\test>dapr list
-  APP ID  DAPR PORT  APP PORT  COMMAND      AGE  CREATED              PID
-  python    3500       5000      python app.py  10s  2019-12-19 21:24.33  25388
+  APP ID  DAPR PORT  APP PORT  COMMAND        AGE  CREATED              PID
+  python  3500       5000      python app.py  10s  2019-12-19 21:24.33  25388
 ```
 
 ### Service Invocation
