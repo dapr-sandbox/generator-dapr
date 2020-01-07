@@ -14,7 +14,7 @@ First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases
 3. Run `app.js` with dapr:
 
 ```bash
-dapr run --app-id js --app-port 3000 --port 3500 node app.js
+dapr run --app-id csharp --app-port 80 --port 3500 dotnet run
 ```
 
 In this case we've named the microservice "js", specified that it runs on port 3000, and specified that the dapr runtime should run on port 3500. 

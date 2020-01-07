@@ -3,9 +3,10 @@
 // Licensed under the MIT License.
 // ------------------------------------------------------------
 
-namespace Subtract.Models {
-    public class Operands {
-        public string OperandOne { get; set;}
-        public string OperandTwo { get; set;}
+namespace DaprProject.Models
+{
+    public class Value
+    {
+        public int Number { get; set; }
     }
 }
