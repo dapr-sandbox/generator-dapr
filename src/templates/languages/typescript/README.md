@@ -26,8 +26,8 @@ To see that the microservice is running, open a new terminal window and list dap
 
 ```cmd
 C:\test>dapr list
-  APP ID  DAPR PORT  APP PORT  COMMAND      AGE  CREATED              PID
-  node    3500       3001      node app.ts  10s  2019-12-19 21:24.33  25388
+  APP ID  DAPR PORT  APP PORT  COMMAND        AGE  CREATED              PID
+  ts      3500       3001      npm run start  10s  2019-12-19 21:24.33  25388
 ```
 
 ### Service Invocation
