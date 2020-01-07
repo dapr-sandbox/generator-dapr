@@ -1,5 +1,5 @@
-# JavaScript Dapr Microservice
-This is a yeoman-generated dapr-enabled JavaScript microservice. You can either run it in self-hosted mode (on your machine) or build a container and run it in Kubernetes.
+# .NET Core Dapr Microservice
+This is a yeoman-generated dapr-enabled .NET Core microservice. You can either run it in self-hosted mode (on your machine) or build a container and run it in Kubernetes.
 
 ## Running in Self-Hosted Mode
 
@@ -9,15 +9,16 @@ First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases
 
 ### Steps
 
-1. Navigate to the `javascript` directory
-2. Run `npm install` to gather dependencies
-3. Run `app.js` with dapr:
+1. Navigate to the `csharp` directory
+2. Run `dotnet restore` to gather dependencies
+3. Run `dotnet build` to build the project
+3. Run `dotnet run` with dapr:
 
 ```bash
 dapr run --app-id csharp --app-port 80 --port 3500 dotnet run
 ```
 
-In this case we've named the microservice "js", specified that it runs on port 3000, and specified that the dapr runtime should run on port 3500. 
+In this case we've named the microservice "js", specified that it runs on port 3000, and specified that the dapr runtime should run on port 3500. Note that if other microservices are already using 3500, you should change this to some other value.
 
 > Note that the dapr cli will automatically configure a Redis store and Redis pubsub component, with component manifests in a "components" directory (`redis.yaml` and `redis_messagebus.yaml` respectively). If you selected non-Redis components (e.g. Cosmos, NATS) that you want to run in self-hosted mode, copy the generated `components` directory into your microservice's directory. `dapr run` will look for the `components` directory and use the components specified there instead of Redis if found. This step will no longer be necessary when [Issue 225](https://github.com/dapr/cli/issues/225) is resolved.
 
@@ -26,7 +27,7 @@ To see that the microservice is running, open a new terminal window and list dap
 ```cmd
 C:\test>dapr list
   APP ID  DAPR PORT  APP PORT  COMMAND      AGE  CREATED              PID
-  node    3500       3000      node app.js  10s  2019-12-19 21:24.33  25388
+  csharp    3500     3000      dotnet run   10s  2019-12-19 21:24.33  25388
 ```
 
 ### Service Invocation
@@ -83,7 +84,7 @@ Observe the messages coming through the app:
 == APP == Got message of topic 'A'
 ```
 
-Now you're able to use dapr to build pubsub applications! Update the topics your javascript microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://github.com/dapr/docs/tree/master/concepts/publish-subscribe-messaging) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
+Now you're able to use dapr to build pubsub applications! Update the topics your .NET Core microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://github.com/dapr/docs/tree/master/concepts/publish-subscribe-messaging) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
 
 ## Deploy in Kubernetes
 
@@ -99,7 +100,7 @@ To deploy this microservice to Kubernetes, you first need to containerize it.
 
 ### Build and Deploy
 
-1. Navigate to the javascript directory: `cd javascript`
+1. Navigate to the C# directory: `cd csharp`
 2. Run `docker build --tag [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME] .`
     > Note that YOUR_CONTAINER_REGISTRY should be the name of your dockerhub repository or the name of whatever other container registry (e.g. Azure CR) you're using
 3. Update the `deploy/typescript.yaml` file, setting the `image` key to [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME]
@@ -110,7 +111,7 @@ To deploy this microservice to Kubernetes, you first need to containerize it.
 
 ```cmd
 NAME                                      READY   STATUS             RESTARTS   AGE
-javascript-microservice-56c74595d-htrk4   2/2     Running            0          6s
+csharp-microservice-56c74595d-htrk4   2/2     Running            0          6s
 ```
 
 Once deployed, you should see that 2/2 containers are running for the deployment. This represents the container that hosts your microservice and the container that hosts the dapr runtime.
@@ -129,18 +130,18 @@ To invoke this microservice's endpoints from another dapr microservice, create r
 
 To test this microservice's endpoints on its own (i.e. without invoking them from another dapr-ized microservice), we can expose the microservice publicly by provisioning an external endpoint. To accomplish this, we'll tweak our microservice's yaml manifest to include a LoadBalancer:
 
-1. Add a LoadBalancer to the top of your javascript.yaml:
+1. Add a LoadBalancer to the top of your csharp.yaml:
 
 ```yaml
 kind: Service
 apiVersion: v1
 metadata:
-  name: javascript-service
+  name: csharp-service
   labels:
-    app: javascript-service
+    app: csharp-service
 spec:
   selector:
-    app: javascript-service
+    app: csharp-service
   ports:
   - protocol: TCP
     port: 80
@@ -148,12 +149,12 @@ spec:
   type: LoadBalancer
 ```
 
-2. Reapply your javascript.yaml file: `kubectl apply -f javascript.yaml`
+2. Reapply your csharp.yaml file: `kubectl apply -f csharp.yaml`
 3. Wait for the public endpoint to be provisioned: `kubectl get svc -w`
 
 ```cmd
 NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
-javascript-service             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
+csharp-service             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
 ```
 
 4. Once the external-ip changes from pending to an IP adress, you can use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
