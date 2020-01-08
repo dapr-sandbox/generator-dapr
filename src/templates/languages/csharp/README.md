@@ -32,7 +32,7 @@ C:\test>dapr list
 ```
 
 ### Service Invocation
-To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make a GET request against `http://localhost:3500/v1.0/invoke/js/method/randomNumber`. Alternatively, use the `dapr invoke` command to call the endpoint:
+To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make a GET request against `http://localhost:3500/v1.0/invoke/csharp/method/randomNumber`. Alternatively, use the `dapr invoke` command to call the endpoint:
 
 ```cmd
 C:\git\test>dapr invoke --app-id js --verb "GET" -m randomNumber
@@ -125,9 +125,9 @@ This microservice (and any other dapr microservice) invokes other endpoints, han
 
 To invoke this microservice's endpoints from another dapr microservice, create requests against the following endpoints:
 
-- GET `http://localhost:3500/v1.0/invoke/ts/method/randomNumber`
-- POST `http://localhost:3500/v1.0/invoke/ts/method/saveNumber` with JSON payload (e.g. {number: 42})
-- GET `http://localhost:3500/v1.0/invoke/ts/method/savedNumber`
+- GET `http://localhost:3500/v1.0/invoke/csharp-microservice/method/randomNumber`
+- POST `http://localhost:3500/v1.0/invoke/csharp-microservice/method/saveNumber` with JSON payload (e.g. {number: 42})
+- GET `http://localhost:3500/v1.0/invoke/csharp-microservice/method/savedNumber`
 
 To test this microservice's endpoints on its own (i.e. without invoking them from another dapr-ized microservice), we can expose the microservice publicly by provisioning an external endpoint. To accomplish this, we'll tweak our microservice's yaml manifest to include a LoadBalancer:
 
@@ -137,32 +137,34 @@ To test this microservice's endpoints on its own (i.e. without invoking them fro
 kind: Service
 apiVersion: v1
 metadata:
-  name: csharp-service
+  name: csharp-microservice
   labels:
-    app: csharp-service
+    app: csharp-microservice
 spec:
   selector:
-    app: csharp-service
+    app: csharp-microservice
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: 80
   type: LoadBalancer
+
+---
 ```
 
 2. Reapply your csharp.yaml file: `kubectl apply -f csharp.yaml`
 3. Wait for the public endpoint to be provisioned: `kubectl get svc -w`
 
 ```cmd
-NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
-csharp-service             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
+NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
+csharp-microservice             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
 ```
 
 4. Once the external-ip changes from pending to an IP adress, you can use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
 
-- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/ts/method/randomNumber`
-- POST `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/ts/method/saveNumber` with JSON payload (e.g. {number: 42})
-- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/ts/method/savedNumber`
+- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/csharp-microservice/method/randomNumber`
+- POST `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/csharp-microservice/method/saveNumber` with JSON payload (e.g. {number: 42})
+- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/csharp-microservice/method/savedNumber`
 
 #### Publish messages
 
