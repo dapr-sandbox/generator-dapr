@@ -5,7 +5,8 @@ This is a yeoman-generated dapr-enabled .NET Core microservice. You can either r
 
 ### Prerequisites
 
-First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases) and run `dapr init`. This will run the dapr runtime on your machine.
+- [Dapr CLI](https://github.com/dapr/cli/releases), must have run `dapr init` 
+- [.NET Core](https://dotnet.microsoft.com/download)
 
 ### Steps
 

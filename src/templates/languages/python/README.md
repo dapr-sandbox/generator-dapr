@@ -5,7 +5,8 @@ This is a yeoman-generated dapr-enabled Python microservice. You can either run 
 
 ### Prerequisites
 
-First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases) and run `dapr init`. This will run the dapr runtime on your machine.
+- [Dapr CLI](https://github.com/dapr/cli/releases), must have run `dapr init` 
+- [Python 3](https://www.python.org/downloads/) and pip (included in versions above 3.4)
 
 ### Steps
 

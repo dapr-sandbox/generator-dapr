@@ -5,7 +5,9 @@ This is a yeoman-generated dapr-enabled TypeScript microservice. You can either 
 
 ### Prerequisites
 
-First you'll need to install the [dapr cli](https://github.com/dapr/cli/releases) and run `dapr init`. This will run the dapr runtime on your machine. You will also need to have Node, npm and TypeScript installed on your machine.
+- [Dapr CLI](https://github.com/dapr/cli/releases), must have run `dapr init` 
+- [Node.js](https://nodejs.org/en/download/) and npm (included in later Node versions)
+- [TypeScript](https://www.typescriptlang.org/#download-links)
 
 ### Steps
 
