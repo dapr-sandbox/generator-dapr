@@ -126,9 +126,9 @@ This microservice (and any other dapr microservice) invokes other endpoints, han
 
 To invoke this microservice's endpoints from another dapr microservice, create requests against the following endpoints:
 
-- GET `http://localhost:3500/v1.0/invoke/ts/method/randomNumber`
-- POST `http://localhost:3500/v1.0/invoke/ts/method/saveNumber` with JSON payload (e.g. {number: 42})
-- GET `http://localhost:3500/v1.0/invoke/ts/method/savedNumber`
+- GET `http://localhost:3500/v1.0/invoke/typescript-microservice/method/randomNumber`
+- POST `http://localhost:3500/v1.0/invoke/typescript-microservice/method/saveNumber` with JSON payload (e.g. {number: 42})
+- GET `http://localhost:3500/v1.0/invoke/typescript-microservice/method/savedNumber`
 
 To test this microservice's endpoints on its own (i.e. without invoking them from another dapr-ized microservice), we can expose the microservice publicly by provisioning an external endpoint. To accomplish this, we'll tweak our microservice's yaml manifest to include a LoadBalancer:
 
@@ -138,17 +138,19 @@ To test this microservice's endpoints on its own (i.e. without invoking them fro
 kind: Service
 apiVersion: v1
 metadata:
-  name: typescript-service
+  name: typescript-microservice
   labels:
-    app: typescript-service
+    app: typescript-microservice
 spec:
   selector:
-    app: typescript-service
+    app: typescript-microservice
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: 3001
   type: LoadBalancer
+
+---
 ```
 
 2. Reapply your typescript.yaml file: `kubectl apply -f typescript.yaml`
@@ -156,14 +158,14 @@ spec:
 
 ```cmd
 NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
-typescript-service             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
+typescript-microservice             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
 ```
 
 4. Once the external-ip changes from pending to an IP adress, you can use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
 
-- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/ts/method/randomNumber`
-- POST `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/ts/method/saveNumber` with JSON payload (e.g. {number: 42})
-- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/ts/method/savedNumber`
+- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/typescript-microservice/method/randomNumber`
+- POST `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/typescript-microservice/method/saveNumber` with JSON payload (e.g. {number: 42})
+- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/typescript-microservice/method/savedNumber`
 
 #### Publish messages
 
