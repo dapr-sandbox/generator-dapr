@@ -25,7 +25,7 @@ app.get('/randomNumber', (_req, res) => {
 /**
  * Returns the current set number. If no number has been set, returns a 404 with an error message.
  */
-app.get('/currentNumber', async (_req, res) => {
+app.get('/savedNumber', async (_req, res) => {
     try {
         let number = await getState("currentNumber");
         res.send({
@@ -40,7 +40,7 @@ app.get('/currentNumber', async (_req, res) => {
  * Sets the current number, taking a JSON object with a "number" property. 
  * Other dapr microservices invoke this function by performing a POST request against http://localhost:<DAPR_PORT>/v1.0/invoke/javascript-microservice/method/persistNumber
  */
-app.post('/persistNumber', async (req, res) => {
+app.post('/saveNumber', async (req, res) => {
     try {
         const response = await persistState("currentNumber", req.body.number);
         res.send(response.status ? 200 : response.status);
