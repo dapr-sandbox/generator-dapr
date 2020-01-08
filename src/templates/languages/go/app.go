@@ -8,16 +8,12 @@ import (
 	"net/http"
 	"fmt"
 	"math/rand"
+	"os"
 	"github.com/gorilla/mux"
 )
 
 type body struct {
     Number int `json:"number,int"`
-}
-
-// appState represents a state in this app.
-type appState struct {
-	Data string `json:"data,omitempty"`
 }
 
 // daprState represents a state in Dapr.
@@ -26,6 +22,10 @@ type daprState struct {
 	Value int `json:"value,omitempty"`
 }
 
+var daprPort = os.Getenv("DAPR_HTTP_PORT")
+var stateURL = fmt.Sprintf("http://localhost:%s/v1.0/state", daprPort)
+
+// Routes - note that these are case sensitive
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/randomNumber", randomNumber).Methods("GET", "OPTIONS")
@@ -42,7 +42,9 @@ func randomNumber(w http.ResponseWriter, r *http.Request) {
 }
 
 func getSavedNumber(w http.ResponseWriter, r *http.Request) {
-	response, err := http.Get("http://localhost:3500/v1.0/state/savedNumber")
+	savedNumberURL := fmt.Sprintf("%s/savedNumber", stateURL)
+	fmt.Print(savedNumberURL)
+	response, err := http.Get(savedNumberURL)
 	if err != nil {
         fmt.Printf("%s", err)
     } else {
@@ -57,7 +59,6 @@ func getSavedNumber(w http.ResponseWriter, r *http.Request) {
 }
 
 func saveNumber(w http.ResponseWriter, r *http.Request) {
-	stateURL := "http://localhost:3500/v1.0/state"
 	var body body
 	json.NewDecoder(r.Body).Decode(&body)
 	state := daprState{
