@@ -19,15 +19,15 @@ Run `yo dapr`, then follow the prompts. This generator will scaffold a dapr appl
 
 ![dapr generator gif](dapr-generator.gif)
 
+## Getting Started with Dapr
+
+See [dapr docs](https://github.com/dapr/docs) and [docr samples](https://github.com/dapr/samples) to get started.
+
 ## Building the Generator
 
 If you're planning on forking or contributing, note that the generator is developed in TypeScript. Correspondingly, only the source code is included in this repo (in `src`). The code that makes up the generator itself lives in `src/index.ts`. The code for each microservice and component template lives in `src/templates`.
 
 To build the code, run `npm run build`, which will compile the .ts files and copy all templates into an `app` directory, where Yeoman looks for them.
-
-## Getting Started with Dapr
-
-See [dapr docs](https://github.com/dapr/docs) and [docr samples](https://github.com/dapr/samples) to get started.
 
 ## Who should use this?
 
