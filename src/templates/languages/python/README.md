@@ -24,7 +24,7 @@ In this case we've named the microservice "py", specified that it runs on port 5
 
 To see that the microservice is running, open a new terminal window and list dapr microservices:
 
-```cmd
+```bash
 C:\test>dapr list
   APP ID  DAPR PORT  APP PORT  COMMAND        AGE  CREATED              PID
   python  3500       5000      python app.py  10s  2019-12-19 21:24.33  25388
