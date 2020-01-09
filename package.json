@@ -13,6 +13,9 @@
   "keywords": [
     "yeoman-generator"
   ],
+  "repository": {
+    "url": "https://github.com/dapr/generator-dapr"
+  },
   "author": "Ryan Volum",
   "license": "ISC",
   "dependencies": {
