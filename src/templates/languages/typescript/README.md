@@ -26,7 +26,7 @@ In this case we've named the microservice "ts", specified that it runs on port 3
 
 To see that the microservice is running, open a new terminal window and list dapr microservices:
 
-```cmd
+```bash
 C:\test>dapr list
   APP ID  DAPR PORT  APP PORT  COMMAND        AGE  CREATED              PID
   ts      3500       3001      npm run start  10s  2019-12-19 21:24.33  25388
@@ -156,9 +156,9 @@ spec:
 2. Reapply your typescript.yaml file: `kubectl apply -f typescript.yaml`
 3. Wait for the public endpoint to be provisioned: `kubectl get svc -w`
 
-```cmd
+```bash
 NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
-typescript-microservice             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
+typescript-microservice        LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
 ```
 
 4. Once the external-ip changes from pending to an IP adress, you can use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
