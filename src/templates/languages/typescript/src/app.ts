@@ -83,7 +83,7 @@ const getState = async (key: string) => {
 // ============================== PUBSUB ==============================
 /**
  * This GET endpoint illustrates how we subscribe to messages. Here we're subscribing to messages of topic A and B.
- * Messages are published by making a POST request with a JSON body against http://localhost:<DAPR_PORT>/v1.0/<TOPIC_NAME>.
+ * Messages are published by making a POST request with a JSON body against http://localhost:<DAPR_PORT>/v1.0/publish/<TOPIC_NAME>.
  */
 app.get('/dapr/subscribe', (_req, res) => {
     res.json([
