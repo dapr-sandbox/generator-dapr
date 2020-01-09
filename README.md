@@ -2,15 +2,20 @@
 
 A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) project.
 
+## Requirements
+
+- Node.js and npm (included in modern Node versions)
+- [dapr CLI](https://github.com/dapr/cli/releases)
+
 ## Installation
 
-- `npm install -g yo`
-- `npm install -g generator-dapr`
+Run the following commands in your preferred shell:
+`npm install -g yo`
+`npm install -g generator-dapr`
 
 ## Usage
 
-- `yo dapr`
-- Following the prompts, this generator will scaffold a dapr application composed of microservices and dapr components. To run the application, consult the READMEs in each generated microservice, which will walk you through package installation, running in self-hosted mode, or building and running in Kubernetes. 
+Run `yo dapr`, then follow the prompts. This generator will scaffold a dapr application composed of microservices and dapr components. To run the application, consult the READMEs in each generated microservice, which will walk you through package installation, running in self-hosted mode, or building and running in Kubernetes. 
 
 ![dapr generator gif](dapr-generator.gif)
 
