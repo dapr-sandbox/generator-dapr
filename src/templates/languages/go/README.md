@@ -23,7 +23,7 @@ In this case we've named the microservice "go", specified that it runs on port 6
 
 To see that the microservice is running, open a new terminal window and list dapr microservices:
 
-```cmd
+```bash
 C:\test>dapr list
   APP ID  DAPR PORT  APP PORT  COMMAND        AGE  CREATED              PID
   go      3500       6000      go run app.go  10s  2019-12-19 21:24.33  25388
@@ -110,7 +110,7 @@ To deploy this microservice to Kubernetes, you first need to containerize it.
 
 ```cmd
 NAME                                      READY   STATUS             RESTARTS   AGE
-go-microservice-56c74595d-htrk4   2/2     Running            0          6s
+go-microservice-56c74595d-htrk4           2/2     Running            0          6s
 ```
 
 Once deployed, you should see that 2/2 containers are running for the deployment. This represents the container that hosts your microservice and the container that hosts the dapr runtime.
@@ -153,7 +153,7 @@ spec:
 2. Reapply your go.yaml file: `kubectl apply -f go.yaml`
 3. Wait for the public endpoint to be provisioned: `kubectl get svc -w`
 
-```cmd
+```bash
 NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
 go-microservice                LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
 ```
