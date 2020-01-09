@@ -21,7 +21,7 @@ If you're planning on forking or contributing, note that the generator is develo
 
 To build the code, run `npm run build`, which will compile the .ts files and copy all templates into an `app` directory, where Yeoman looks for them.
 
-## Getting Started
+## Getting Started with Dapr
 
 See [dapr docs](https://github.com/dapr/docs) and [docr samples](https://github.com/dapr/samples) to get started.
 
