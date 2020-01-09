@@ -1,7 +1,5 @@
 # generator-dapr
 
-**NOTE**: This package is a work in progress and is not yet fully functional. 
-
 A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) project.
 
 ## Installation
