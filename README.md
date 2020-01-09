@@ -17,7 +17,7 @@ Run the following commands in your preferred shell:
 
 Run `yo dapr`, then follow the prompts. This generator will scaffold a dapr application composed of microservices and dapr components. To run the application, consult the READMEs in each generated microservice, which will walk you through package installation, running in self-hosted mode, or building and running in Kubernetes. 
 
-![dapr generator gif](dapr-generator.gif)
+![dapr generator gif](https://github.com/dapr/generator-dapr/blob/master/dapr-generator.gif)
 
 ## Getting Started with Dapr
 
