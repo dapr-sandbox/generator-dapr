@@ -25,10 +25,10 @@ In this case we've named the microservice "js", specified that it runs on port 3
 
 To see that the microservice is running, open a new terminal window and list dapr microservices:
 
-```cmd
+```bash
 C:\test>dapr list
   APP ID  DAPR PORT  APP PORT  COMMAND      AGE  CREATED              PID
-  csharp    3500     3000      dotnet run   10s  2019-12-19 21:24.33  25388
+  csharp  3500       3000      dotnet run   10s  2019-12-19 21:24.33  25388
 ```
 
 ### Service Invocation
@@ -155,7 +155,7 @@ spec:
 2. Reapply your csharp.yaml file: `kubectl apply -f csharp.yaml`
 3. Wait for the public endpoint to be provisioned: `kubectl get svc -w`
 
-```cmd
+```bash
 NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)            AGE
 csharp-microservice             LoadBalancer   10.0.172.159   <pending>      80:32632/TCP       7s
 ```
