@@ -11,7 +11,7 @@ This is a yeoman-generated dapr-enabled Python microservice. You can either run 
 ### Steps
 
 1. Navigate to the `python` directory: `cd python`
-2. Run `pip install -r requirements.txt` to gather dependencies
+2. Run `pip install flask flask_cors requests` to gather dependencies
 3. Run `app.py` with dapr:
 
 ```bash
