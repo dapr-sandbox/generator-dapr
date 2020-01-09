@@ -4,6 +4,7 @@ A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) 
 
 ## Installation
 
+- `npm install -g yo`
 - `npm install -g generator-dapr`
 
 ## Usage
