@@ -50,4 +50,4 @@ def topicBHandler():
     print(f'B: {request.json}', flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
-app.run()
+app.run(host='0.0.0.0')
