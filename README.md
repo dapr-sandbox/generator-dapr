@@ -13,6 +13,8 @@ A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) 
 - `yo dapr`
 - Following the prompts, this generator will scaffold a dapr application composed of microservices and dapr components. To run the application, consult the READMEs in each generated microservice, which will walk you through package installation, running in self-hosted mode, or building and running in Kubernetes. 
 
+![dapr generator gif](dapr-generator.gif)
+
 ## Building the Generator
 
 If you're planning on forking or contributing, note that the generator is developed in TypeScript. Correspondingly, only the source code is included in this repo (in `src`). The code that makes up the generator itself lives in `src/index.ts`. The code for each microservice and component template lives in `src/templates`.
