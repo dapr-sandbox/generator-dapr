@@ -22,6 +22,7 @@
     "yeoman-generator": "^4.2.0"
   },
   "devDependencies": {
-    "copyfiles": "^2.1.1"
+    "copyfiles": "^2.1.1",
+    "typescript": "^3.7.4"
   }
 }
