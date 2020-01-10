@@ -1,6 +1,6 @@
 # generator-dapr
 
-A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) project. This generator creates and configures microservices in several languages, along with component manifests for state stores and pubsub mechanisms.
+A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) project. This generator creates and configures microservices in several languages, along with component manifests for state stores and pubsub mechanisms. It also includes assets and instructions for running the microservices in self-hosted mode (on your machine/device) and in Kubernetes.
 
 ## Requirements
 
