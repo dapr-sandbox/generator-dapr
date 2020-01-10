@@ -10,16 +10,15 @@ This is a yeoman-generated dapr-enabled .NET Core microservice. You can either r
 
 ### Steps
 
-1. Navigate to the `csharp` directory
-2. Run `dotnet restore` to gather dependencies
-3. Run `dotnet build` to build the project
-3. Run `dotnet run` with dapr:
+1. Navigate to the `csharp` directory: `cd csharp`
+2. Run `dotnet build` to restore and build the project
+3. Run `dotnet run` through the dapr CLI:
 
 ```bash
 dapr run --app-id csharp --app-port 80 --port 3500 dotnet run
 ```
 
-In this case we've named the microservice "js", specified that it runs on port 3000, and specified that the dapr runtime should run on port 3500. Note that if other microservices are already using 3500, you should change this to some other value.
+In this case we've named the microservice "csharp", specified that it runs on port 3000, and specified that the dapr runtime should run on port 3500. Note that if other microservices are already using 3500, you should change this to some other value.
 
 > Note that the dapr cli will automatically configure a Redis store and Redis pubsub component, with component manifests in a "components" directory (`redis.yaml` and `redis_messagebus.yaml` respectively). If you selected non-Redis components (e.g. Cosmos, NATS) that you want to run in self-hosted mode, copy the generated `components` directory into your microservice's directory. `dapr run` will look for the `components` directory and use the components specified there instead of Redis if found. This step will no longer be necessary when [Issue 225](https://github.com/dapr/cli/issues/225) is resolved.
 
@@ -35,7 +34,7 @@ C:\test>dapr list
 To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make a GET request against `http://localhost:3500/v1.0/invoke/csharp/method/randomNumber`. Alternatively, use the `dapr invoke` command to call the endpoint:
 
 ```cmd
-C:\git\test>dapr invoke --app-id js --verb "GET" -m randomNumber
+C:\git\test>dapr invoke --app-id csharp --verb "GET" -m randomNumber
 {"randomNumber":42}
 App invoked successfully
 ```
@@ -48,12 +47,12 @@ The generated microservice includes helper methods to get and set key/value pair
 
 **Windows**:
 ```cmd
-C:\git\test>dapr invoke --app-id js --verb "POST" -m saveNumber -p "{ \"number\": 42 }"
+C:\git\test>dapr invoke --app-id csharp --verb "POST" -m saveNumber -p "{ \"number\": 42 }"
 ```
 
 **Linux/Mac**:
 ```cmd
-C:\git\test>dapr invoke --app-id js --verb "POST" -m saveNumber -p '{ "number": 42 }'
+C:\git\test>dapr invoke --app-id csharp --verb "POST" -m saveNumber -p '{ "number": 42 }'
 ```
 
 You should see the following output:
@@ -64,7 +63,7 @@ App invoked successfully
 
 Now you can verify that your state was persisted:
 ```cmd
-C:\git\test>dapr invoke --app-id js --verb "GET" -m savedNumber
+C:\git\test>dapr invoke --app-id csharp --verb "GET" -m savedNumber
 {number: 42}
 App invoked successfully
 ```
