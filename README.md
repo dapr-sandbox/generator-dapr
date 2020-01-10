@@ -10,8 +10,8 @@ A [Yeoman](http://yeoman.io) generator for scaffolding a [dapr](http://dapr.io) 
 ## Installation
 
 Run the following commands in your preferred shell:
-`npm install -g yo`
-`npm install -g generator-dapr`
+- `npm install -g yo`
+- `npm install -g generator-dapr`
 
 ## Usage
 
