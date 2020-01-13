@@ -137,7 +137,7 @@ To deploy this microservice to Kubernetes, you first need to containerize it.
 
 ```cmd
 NAME                                      READY   STATUS             RESTARTS   AGE
-csharp-microservice-56c74595d-htrk4   2/2     Running            0          6s
+csharp-microservice-56c74595d-htrk4       2/2     Running            0          6s
 ```
 
 Once deployed, you should see that 2/2 containers are running for the deployment. This represents the container that hosts your microservice and the container that hosts the dapr runtime.
