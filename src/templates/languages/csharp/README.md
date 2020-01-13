@@ -31,7 +31,7 @@ C:\test>dapr list
 ```
 
 ### Service Invocation
-To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make a GET request against `http://localhost:3500/v1.0/invoke/csharp/method/randomNumber`. Alternatively, use the `dapr invoke` command to call the endpoint:
+To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make requests against this project's endpoints:
 
 **Deposit Money**
 
