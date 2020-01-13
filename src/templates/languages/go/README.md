@@ -166,6 +166,4 @@ go-microservice                LoadBalancer   10.0.172.159   <pending>      80:3
 
 #### Publish messages
 
-This microservice subscribes to messages of topic "A" and "B" (see '/dapr/subscribe' GET endpoint). Other dapr microservices can publish messages of these topics by POSTing a JSON payload against `http://localhost:3500/v1.0/<YOUR_TOPIC>`. For example, another microservice could publish a message of topic "A" by POSTing {foo: "bar"} against `http://localhost:3500/v1.0/A`.
-
-If you don't have another microservice, or if you want to test pubsub in this microservice, you can provision an external endpoint (following LoadBalancer steps above) and publish messages against `http://localhost:<YOUR_EXTERNAL_ENDPOINT>/v1.0/<YOUR_TOPIC>`.
+This microservice subscribes to messages of topic "A" and "B" (see '/dapr/subscribe' GET endpoint). Other dapr microservices can publish messages of these topics by POSTing a JSON payload against `http://localhost:3500/v1.0/publish/<YOUR_TOPIC>`. For example, another microservice could publish a message of topic "A" by POSTing {"foo": "bar"} against `http://localhost:3500/v1.0/publish/A`.

@@ -31,59 +31,85 @@ C:\test>dapr list
 ```
 
 ### Service Invocation
-To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make a GET request against `http://localhost:3500/v1.0/invoke/csharp/method/randomNumber`. Alternatively, use the `dapr invoke` command to call the endpoint:
+To test the microservice, you can start by invoking one of its REST endpoints through the dapr port. Use your favorite http client (e.g. curl, Postman, your browser) to make requests against this project's endpoints:
 
-```cmd
-C:\git\test>dapr invoke --app-id csharp --verb "GET" -m randomNumber
-{"randomNumber":42}
-App invoked successfully
+**Deposit Money**
+
+On Linux, MacOS:
+ ```sh
+curl -X POST http://localhost:5000/deposit \
+        -H 'Content-Type: application/json' \
+        -d '{ "id": "17", "amount": 12 }'
+ ```
+
+ On Windows:
+ ```sh
+curl -X POST http://localhost:5000/deposit -H "Content-Type: application/json" -d "{ \"id\": \"17\", \"amount\": 12 }"
+ ```
+
+Output:
+```txt
+ {"id":"17","balance":12}
 ```
 
-Other microservices will also be able to invoke this endpoint over HTTP.
+ ---
 
-### State Persistence
+**Withdraw Money**
+On Linux, MacOS:
+ ```sh
+curl -X POST http://localhost:5000/withdraw \
+        -H 'Content-Type: application/json' \
+        -d '{ "id": "17", "amount": 10 }'
+ ```
+On Windows:
+ ```sh
+ curl -X POST http://localhost:5000/withdraw -H "Content-Type: application/json" -d "{ \"id\": \"17\", \"amount\": 10 }"
+ ```
 
-The generated microservice includes helper methods to get and set key/value pairs. Note that these methods persist state through dapr, by POSTing or GETting against `http://localhost:3500/v1.0/state`. We can test our state persistence by invoking the POST `/saveNumber` endpoint and the GET `/savedNumber` endpoint. Once again, use your favorite REST client or `dapr invoke` to call these endpoints: 
-
-**Windows**:
-```cmd
-C:\git\test>dapr invoke --app-id csharp --verb "POST" -m saveNumber -p "{ \"number\": 42 }"
+Outpt:
+```txt
+{"id":"17","balance":2}
 ```
 
-**Linux/Mac**:
-```cmd
-C:\git\test>dapr invoke --app-id csharp --verb "POST" -m saveNumber -p '{ "number": 42 }'
+ ---
+
+**Get Balance**
+
+```sh
+curl http://localhost:5000/17
+```
+Output:
+```txt
+{"id":"17","balance":2}
 ```
 
-You should see the following output:
-```cmd
-OK
-App invoked successfully
-```
-
-Now you can verify that your state was persisted:
-```cmd
-C:\git\test>dapr invoke --app-id csharp --verb "GET" -m savedNumber
-{number: 42}
-App invoked successfully
-```
-
-Now you can tweak your code to get and set any state with your microservice! See [state management doc](https://github.com/dapr/docs/blob/master/concepts/state-management/state-management.md) and [hello-world sample](https://github.com/dapr/samples/tree/master/1.hello-world) for more state information.
+ ---
 
 ### Pubsub
-Similarly, you can test the microservice's pubsub functionality by publishing a message topic that it subscribes to. In this case, the microservice subscribes to messages of topic "A", and "B". Publish by creating a POST request against `http://localhost:3500/v1.0/A`. Alternatively, use the `dapr publish` command to publish a message: 
+Similarly, you can test the microservice's pubsub functionality by publishing a message topic that it subscribes to. In this case, the microservice subscribes to messages of topic "withdraw", and "deposit". Publish by creating a POST request against `http://localhost:3500/v1.0/{topic}`. Alternatively, use the `dapr publish` command to publish a message: 
 
-```cmd
-dapr publish --topic "A"
-Event published successfully
+
+ **Withdraw Money (pubsub)**
+On Linux, MacOS:
+```sh
+dapr publish -t withdraw -p '{"id": "17", "amount": 15 }'
 ```
+On Windows:
+ ```sh
+ dapr publish -t withdraw -p "{\"id\": \"17\", \"amount\": 15 }"
+ ```
+ ---
 
-Observe the messages coming through the app: 
-
-```cmd
-== APP == Got message of topic 'A'
+**Deposit Money (pubsub)**
+On Linux, MacOS:
+```sh
+dapr publish -t deposit -p '{"id": "17", "amount": 15 }'
 ```
-
+On Windows:
+ ```sh
+ dapr publish -t deposit -p "{\"id\": \"17\", \"amount\": 15 }"
+```
+ ---
 Now you're able to use dapr to build pubsub applications! Update the topics your .NET Core microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://github.com/dapr/docs/tree/master/concepts/publish-subscribe-messaging) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
 
 ## Deploy in Kubernetes
@@ -103,15 +129,15 @@ To deploy this microservice to Kubernetes, you first need to containerize it.
 1. Navigate to the C# directory: `cd csharp`
 2. Run `docker build --tag [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME] .`
     > Note that YOUR_CONTAINER_REGISTRY should be the name of your dockerhub repository or the name of whatever other container registry (e.g. Azure CR) you're using
-3. Update the `deploy/typescript.yaml` file, setting the `image` key to [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME]
+3. Update the `deploy/csharp.yaml` file, setting the `image` key to [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME]
 4. Push your container image up to Dockerhub or your container registry: `docker push [YOUR_CONTAINER_REGISTRY/YOUR_CONTAINER_NAME]`
-5. Apply your Kubernetes manifest: `kubectl apply -f typescript.yaml`
-    > If you're using a private container registry, you'll need to add the appropriate credentials to the typescript.yaml
+5. Apply your Kubernetes manifest: `kubectl apply -f csharp.yaml`
+    > If you're using a private container registry, you'll need to add the appropriate credentials to the csharp.yaml file
 6. Run `kubectl get pods -w` to see your pod spin up:
 
 ```cmd
 NAME                                      READY   STATUS             RESTARTS   AGE
-csharp-microservice-56c74595d-htrk4   2/2     Running            0          6s
+csharp-microservice-56c74595d-htrk4       2/2     Running            0          6s
 ```
 
 Once deployed, you should see that 2/2 containers are running for the deployment. This represents the container that hosts your microservice and the container that hosts the dapr runtime.
@@ -124,9 +150,9 @@ This microservice (and any other dapr microservice) invokes other endpoints, han
 
 To invoke this microservice's endpoints from another dapr microservice, create requests against the following endpoints:
 
-- GET `http://localhost:3500/v1.0/invoke/csharp-microservice/method/randomNumber`
-- POST `http://localhost:3500/v1.0/invoke/csharp-microservice/method/saveNumber` with JSON payload (e.g. {number: 42})
-- GET `http://localhost:3500/v1.0/invoke/csharp-microservice/method/savedNumber`
+- GET `http://localhost:3500/v1.0/invoke/csharp-microservice/method/{account}` Get the balance for the account specified by `id`
+- POST `http://localhost:3500/v1.0/invoke/csharp-microservice/method/deposit` Accepts a JSON payload to deposit money to an account
+- POST `http://localhost:3500/v1.0/invoke/csharp-microservice/method/withdraw` Accepts a JSON payload to withdraw money from an account
 
 To test this microservice's endpoints on its own (i.e. without invoking them from another dapr-ized microservice), we can expose the microservice publicly by provisioning an external endpoint. To accomplish this, we'll tweak our microservice's yaml manifest to include a LoadBalancer:
 
@@ -161,12 +187,10 @@ csharp-microservice             LoadBalancer   10.0.172.159   <pending>      80:
 
 4. Once the external-ip changes from pending to an IP adress, you can use a REST client (e.g. curl, Postman, browser) to make calls against the following endpoints:
 
-- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/csharp-microservice/method/randomNumber`
-- POST `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/csharp-microservice/method/saveNumber` with JSON payload (e.g. {number: 42})
-- GET `http://<YOUR_PUBLIC_ENDPOINT>/v1.0/invoke/csharp-microservice/method/savedNumber`
+- GET `http://localhost:3500/v1.0/invoke/csharp-microservice/method/{account}`
+- POST `http://localhost:3500/v1.0/invoke/csharp-microservice/method/deposit`
+- POST `http://localhost:3500/v1.0/invoke/csharp-microservice/method/withdraw`
 
 #### Publish messages
 
-This microservice subscribes to messages of topic "A" and "B" (see '/dapr/subscribe' GET endpoint). Other dapr microservices can publish messages of these topics by POSTing a JSON payload against `http://localhost:3500/v1.0/<YOUR_TOPIC>`. For example, another microservice could publish a message of topic "A" by POSTing {foo: "bar"} against `http://localhost:3500/v1.0/A`.
-
-If you don't have another microservice, or if you want to test pubsub in this microservice, you can provision an external endpoint (following LoadBalancer steps above) and publish messages against `http://localhost:<YOUR_EXTERNAL_ENDPOINT>/v1.0/<YOUR_TOPIC>`.
+This microservice subscribes to messages of topic "deposit" and "withdraw" (see '/dapr/subscribe' GET endpoint). Other dapr microservices can publish messages of these topics by POSTing a JSON payload against `http://localhost:3500/v1.0/publish/<YOUR_TOPIC>`. For example, another microservice could publish a message of topic "withdraw" by POSTing {"id": "17", "amount": 42} against `http://localhost:3500/v1.0/publish/withdraw`.
