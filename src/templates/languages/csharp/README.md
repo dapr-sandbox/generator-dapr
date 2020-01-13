@@ -18,7 +18,7 @@ This is a yeoman-generated dapr-enabled .NET Core microservice. You can either r
 dapr run --app-id csharp --app-port 80 --port 3500 dotnet run
 ```
 
-In this case we've named the microservice "csharp", specified that it runs on port 3000, and specified that the dapr runtime should run on port 3500. Note that if other microservices are already using 3500, you should change this to some other value.
+In this case we've named the microservice "csharp", specified that it runs on port 80, and specified that the dapr runtime should run on port 3500. Note that if other microservices are already using 3500, you should change this to some other value.
 
 > Note that the dapr cli will automatically configure a Redis store and Redis pubsub component, with component manifests in a "components" directory (`redis.yaml` and `redis_messagebus.yaml` respectively). If you selected non-Redis components (e.g. Cosmos, NATS) that you want to run in self-hosted mode, copy the generated `components` directory into your microservice's directory. `dapr run` will look for the `components` directory and use the components specified there instead of Redis if found. This step will no longer be necessary when [Issue 225](https://github.com/dapr/cli/issues/225) is resolved.
 
@@ -27,7 +27,7 @@ To see that the microservice is running, open a new terminal window and list dap
 ```bash
 C:\test>dapr list
   APP ID  DAPR PORT  APP PORT  COMMAND      AGE  CREATED              PID
-  csharp  3500       3000      dotnet run   10s  2019-12-19 21:24.33  25388
+  csharp  3500       80        dotnet run   10s  2019-12-19 21:24.33  25388
 ```
 
 ### Service Invocation
