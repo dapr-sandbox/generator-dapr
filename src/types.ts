@@ -7,7 +7,11 @@ export type StateStore = "Redis" | "Azure CosmosDB";
 // Supported pubsub components
 export type PubSub = "Redis Streams" | "NATS" | "Azure Service Bus" | "RabbitMQ";
 
-export type Component = PubSub | StateStore;
+// Support component bindings
+export type Binding = "Kafka Binding" | "RabbitMQ Binding" | "AWS SQS Binding" | "AWS SNS Binding" | "Azure EventHubs Binding" | "Azure CosmosDB Binding" | "Azure SignalR Binding" | "GCP Storage Bucket Binding" | "HTTP Binding" | "MQTT Binding" | "Redis Binding" | "AWS DynamoDB Binding" | "AWS S3 Binding" | "Azure Blob Storage Binding" | "Azure Service Bus Queues Binding" | "GCP Cloud Pub/Sub Binding" | "Kubernetes Events Binding";
+
+// Types of components
+export type Component = PubSub | StateStore | Binding;
 
 // Supported protocols
 type DaprProtocol = "HTTP" | "gRPC";
@@ -16,7 +20,8 @@ export interface Answers {
     name: string,
     languages: Language[],
     stateStore: string,
-    pubsub: string
+    pubsub: string,
+    bindings: string[]
 }
 
 export interface Microservice {
@@ -39,6 +44,8 @@ export interface App {
     name: string;
     /** The microservices that compose the dapr application. */
     microservices: Microservice[];
+    /** The bindings that the application uses */
+    bindings: Binding[];
     /** The state store to be used by the dapr application. */
     stateStore?: StateStore;
     /** The pubsub mechanism to be used by the dapr application. */
