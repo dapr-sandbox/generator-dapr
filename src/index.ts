@@ -1,5 +1,5 @@
 import * as Generator from 'yeoman-generator';
-import { Answers, App, Language, Microservice, Prompt, Prompts, StateStore, PubSub, Component } from './types';
+import { Answers, App, Language, Microservice, Prompt, Prompts, StateStore, PubSub, Component, Binding } from './types';
 import { componentTemplates, languageTemplates } from './files';
 import * as emoji from 'node-emoji';
 
@@ -35,6 +35,12 @@ export default class extends Generator {
                 name: "pubsub",
                 message: "What pubsub component (if any) would you like your app to use? (Use space bar to check the following)",
                 choices: ["Redis Streams", "NATS", "Azure Service Bus", "RabbitMQ", "None"]
+            },
+            {
+                type: "checkbox",
+                name: "bindings",
+                message: "What bindings (if any) would you like to use?",
+                choices: ["Kafka Binding", "RabbitMQ Binding", "AWS SQS Binding", "AWS SNS Binding", "Azure EventHubs Binding", "Azure CosmosDB Binding", "Azure SignalR Binding", "GCP Storage Bucket Binding", "HTTP Binding", "MQTT Binding", "Redis Binding", "AWS DynamoDB Binding", "AWS S3 Binding", "Azure Blob Storage Binding", "Azure Service Bus Queues Binding", "GCP Cloud Pub/Sub Binding", "Kubernetes Events Binding", "None"]
             }
         ] as Prompts;
 
@@ -58,6 +64,7 @@ export default class extends Generator {
             name: (this.answers.name) ? this.answers.name : this.options.name,
             stateStore: (this.answers.stateStore !== "None") ? this.answers.stateStore as StateStore : undefined,
             pubsub: (this.answers.pubsub !== "None") ? this.answers.pubsub as PubSub : undefined,
+            bindings: (this.answers.bindings.filter(b => b !== "None") as Binding[]),
             microservices
         };
 
@@ -71,6 +78,9 @@ export default class extends Generator {
         this._createMicroservices();
         if (this.app.stateStore) this._createComponentManifest(this.app.stateStore);
         if (this.app.pubsub) this._createComponentManifest(this.app.pubsub);
+        if (this.app.bindings && this.app.bindings.length > 0) {
+            this.app.bindings.forEach(binding => this._createComponentManifest(binding));
+        }
         this._deleteTempFile("deploy");
         this._deleteTempFile("components");
     }
@@ -81,7 +91,6 @@ export default class extends Generator {
     end() {
         this._logScaffolding();
         // Give dapr run advice
-        this.log("To run your dapr dapr app, download the dapr CLI (https://github.com/dapr/cli/releases). To run in Kubernetes, run 'dapr init --kubernetes'. To run in self-hosted mode, run 'dapr init'. Then follow instructions in each microservice's README to install packages and build your build/run your microservices.");
 
         // Give dapr state advice
         switch (this.app.stateStore) {
@@ -92,6 +101,8 @@ export default class extends Generator {
                 this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc: https://github.com/dapr/docs/blob/master/howto/setup-state-store/setup-azure-cosmosdb.md)");
                 break;
         }
+
+        this.log("To run your dapr dapr app, follow instructions in each microservice's READMEs!");
     }
 
     _createMicroservices() {
@@ -136,7 +147,7 @@ export default class extends Generator {
     _createComponentManifest(component: Component) {
         const { componentName, manifestPath } = componentTemplates[component];
         console.log(emoji.get('heavy_check_mark'), ` Creating component manifest (${componentName}.yaml) for ${component}`);
-        
+
         //For Kubernetes 
         this.fs.copyTpl(
             this.templatePath(manifestPath),
@@ -171,7 +182,6 @@ export default class extends Generator {
                 message += ` and a ${app.microservices[app.microservices.length - 1].language} microservice`;
         }
 
-        message += (app.stateStore) ? `. I also created the configuration files for a ${app.stateStore} state store.` : "";
         this.log(message);
     }
 };
