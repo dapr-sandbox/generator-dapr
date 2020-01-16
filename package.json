@@ -7,6 +7,7 @@
   ],
   "main": "index.js",
   "scripts": {
+    "prebuild": "rimraf app",
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/templates/**/* app"
   },
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "copyfiles": "^2.1.1",
+    "rimraf": "^3.0.0",
     "typescript": "^3.7.4"
   }
 }
