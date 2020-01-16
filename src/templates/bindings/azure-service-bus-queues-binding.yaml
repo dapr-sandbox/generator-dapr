@@ -1,0 +1,12 @@
+# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/servicebusqueues.md for description
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: bindings.azure.servicebusqueues
+  metadata:
+  - name: connectionString
+    value: sb://************
+  - name: queueName
+    value: queue1

@@ -1,0 +1,14 @@
+# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/eventhubs.md for description
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: bindings.azure.eventhubs
+  metadata:
+  - name: connectionString
+    value: Endpoint=sb://*****************
+  - name: consumerGroup  # Optional
+    value: group1
+  - name: messageAge
+    value: 5s         # Optional. Golang duration

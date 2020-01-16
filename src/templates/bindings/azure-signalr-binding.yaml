@@ -1,0 +1,12 @@
+# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/signalr.md for description
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: bindings.azure.signalr
+  metadata:
+  - name: connectionString
+    value: Endpoint=https://<your-azure-signalr>.service.signalr.net;AccessKey=<your-access-key>;Version=1.0;
+  - name: hub  # Optional
+    value: <hub name>

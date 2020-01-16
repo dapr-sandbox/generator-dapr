@@ -1,0 +1,10 @@
+# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/kubernetes.md for description
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: bindings.kubernetes
+  metadata:
+  - name: namespace
+    value: default

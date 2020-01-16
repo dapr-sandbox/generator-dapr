@@ -1,0 +1,16 @@
+# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/s3.md for description
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: bindings.aws.s3
+  metadata:
+  - name: region
+    value: us-west-2
+  - name: accessKey
+    value: *****************
+  - name: secretKey
+    value: *****************
+  - name: bucket
+    value: mybucket

@@ -1,0 +1,18 @@
+# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/cosmosdb.md for description
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: <name>
+spec:
+  type: bindings.azure.cosmosdb
+  metadata:
+  - name: url
+    value: https://******.documents.azure.com:443/
+  - name: masterKey
+    value: *****
+  - name: database
+    value: db
+  - name: collection
+    value: collection
+  - name: partitionKey
+    value: message
