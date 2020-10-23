@@ -69,7 +69,7 @@ C:\git\test>dapr invoke --app-id ts --verb "GET" -m savedNumber
 {number: 42}
 ```
 
-Now you can tweak your code to get and set any state with your microservice! See [state management doc](https://github.com/dapr/docs/blob/master/concepts/state-management/state-management.md) and [hello-world sample](https://github.com/dapr/samples/tree/master/1.hello-world) for more state information.
+Now you can tweak your code to get and set any state with your microservice! See [state management doc](https://docs.dapr.io/developing-applications/building-blocks/state-management/) and [hello-world sample](https://github.com/dapr/samples/tree/master/1.hello-world) for more state information.
 
 ### Pubsub
 Similarly, you can test the microservice's pubsub functionality by publishing a message topic that it subscribes to. In this case, the microservice subscribes to messages of topic "A", and "B". Publish by creating a POST request against `http://localhost:3500/v1.0/A`. Alternatively, use the `dapr publish` command to publish a message: 
@@ -85,7 +85,7 @@ Observe the messages coming through the app:
 == APP == Got message of topic 'A'
 ```
 
-Now you're able to use dapr to build pubsub applications! Update the topics your typescript microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://github.com/dapr/docs/tree/master/concepts/publish-subscribe-messaging) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
+Now you're able to use dapr to build pubsub applications! Update the topics your typescript microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
 
 ## Deploy in Kubernetes
 

@@ -1,4 +1,4 @@
-# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/cosmosdb.md for description
+# See https://docs.dapr.io/operations/components/setup-bindings/supported-bindings/cosmosdb/ for description
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
