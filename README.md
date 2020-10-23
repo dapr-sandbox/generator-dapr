@@ -21,7 +21,7 @@ Run `yo dapr`, then follow the prompts. This generator will scaffold a dapr appl
 
 ## Getting Started with Dapr
 
-See [dapr docs](https://github.com/dapr/docs) and [docr samples](https://github.com/dapr/samples) to get started.
+See [dapr docs](https://docs.dapr.io) and [docr samples](https://github.com/dapr/samples) to get started.
 
 ## Building the Generator
 

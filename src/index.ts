@@ -95,10 +95,10 @@ export default class extends Generator {
         // Give dapr state advice
         switch (this.app.stateStore) {
             case "Redis":
-                this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc: https://github.com/dapr/docs/blob/master/howto/setup-state-store/setup-redis.md)");
+                this.log("Next you'll need to create a Redis store and add configuration details to your redis.yaml (see Redis dapr doc: https://docs.dapr.io/getting-started/configure-redis/)");
                 break;
             case "Azure CosmosDB":
-                this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc: https://github.com/dapr/docs/blob/master/howto/setup-state-store/setup-azure-cosmosdb.md)");
+                this.log("Next you'll need to create a CosmosDB database in Azure and add configuration details to your cosmosdb.yaml (see CosmosDB dapr doc: https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/setup-azure-cosmosdb/)");
                 break;
         }
 

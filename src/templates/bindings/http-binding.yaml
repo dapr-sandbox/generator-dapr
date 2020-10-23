@@ -1,4 +1,4 @@
-# See https://github.com/dapr/docs/blob/master/concepts/bindings/specs/http.md for example
+# See https://docs.dapr.io/operations/components/setup-bindings/supported-bindings/http/ for example
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:

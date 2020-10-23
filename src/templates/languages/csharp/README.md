@@ -110,7 +110,7 @@ On Windows:
  dapr publish -t deposit -p "{\"id\": \"17\", \"amount\": 15 }"
 ```
  ---
-Now you're able to use dapr to build pubsub applications! Update the topics your .NET Core microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://github.com/dapr/docs/tree/master/concepts/publish-subscribe-messaging) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
+Now you're able to use dapr to build pubsub applications! Update the topics your .NET Core microservice subscribes to, create new endpoints/handlers, and try publishing a message from a different microservice! See [pubsub doc](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) and [pubsub sample](https://github.com/dapr/samples/tree/master/4.pub-sub) for more details.
 
 ## Deploy in Kubernetes
 
